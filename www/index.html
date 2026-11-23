@@ -388,7 +388,14 @@ pre.sql{background:#0e0e10;border:1px solid var(--line);border-radius:14px;paddi
 .reel-actions{position:absolute;right:10px;bottom:calc(var(--sab) + 118px);z-index:15;display:flex;flex-direction:column;gap:16px;align-items:center}
 .action-btn{background:none;border:none;color:#fff;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:700;min-height:52px}
 .action-btn .ic{width:48px;height:48px;border-radius:50%;background:rgba(0,0,0,.45);display:grid;place-items:center;font-size:22px}
-.action-btn.liked .ic{background:#FF2E4C}
+.action-btn.liked .ic{background:rgba(0,0,0,.45)}
+/* LIKE HEART — default me khaali (outline) dil; like karne par sirf dil hi laal bharta hai,
+   peeche wale gole ka rang nahi badalta. Teeno like jagah (For You / reel player / branching
+   player) par yahi ek style lagta hai. */
+.heart-ic svg{width:25px;height:25px;display:block;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:fill .22s ease,stroke .22s ease}
+.fy-act.liked .heart-ic svg,.bp-act.liked .heart-ic svg,.action-btn.liked .heart-ic svg{fill:#FF2E4C;stroke:#FF2E4C;filter:drop-shadow(0 0 6px rgba(255,46,76,.55));animation:heartPop .38s cubic-bezier(.34,1.56,.64,1)}
+@keyframes heartPop{0%{transform:scale(.72)}55%{transform:scale(1.22)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion: reduce){.fy-act.liked .heart-ic svg,.bp-act.liked .heart-ic svg,.action-btn.liked .heart-ic svg{animation:none}}
 .reel-bottom{position:absolute;left:14px;right:76px;bottom:calc(var(--sab) + 52px);z-index:12;color:#fff}
 .reel-bottom h3{margin:0 0 4px;font-size:17px}
 .reel-bottom p{margin:0;color:#e6e6e6;font-size:13px;line-height:1.5}
@@ -721,6 +728,25 @@ pre.branch-json{max-height:340px;overflow:auto}
 .upd-btn.ghost{flex:0 0 auto;background:transparent;border:1px solid rgba(255,255,255,.22);color:#d8d8dc;padding:13px 16px}
 .upd-btn[disabled]{opacity:.55}
 .upd-new-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#FF2E4C;margin-left:7px;vertical-align:middle}
+/* ===== IN-APP UPDATE MODAL — download + installer, app ke andar hi (koi browser / Downloads redirect nahi) ===== */
+.upd-modal{position:fixed;inset:0;z-index:650;background:rgba(4,4,8,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;place-items:center;padding:calc(var(--sat) + 18px) 18px calc(var(--sab) + 18px)}
+.upd-modal.open{display:grid}
+.upd-box{width:100%;max-width:400px;background:rgba(18,19,28,.96);border:1px solid rgba(251,191,36,.45);border-radius:22px;padding:22px 18px 18px;box-shadow:0 24px 60px rgba(0,0,0,.65), inset 0 1px 0 rgba(255,255,255,.10);text-align:center;animation:viewIn .3s ease both}
+.upd-box .upd-ico{width:52px;height:52px;border-radius:16px;margin:0 auto 12px}
+.upd-box .upd-ico svg{width:27px;height:27px}
+.upd-box h3{margin:0 0 4px;font-size:19px;color:#fff}
+.upd-box .upd-ver{color:#FFD34D;font-weight:800;font-size:13.5px;margin:0 0 4px}
+.upd-box .upd-detail{color:var(--muted);font-size:13px;line-height:1.55;margin:0}
+.upd-box .upd-prog{margin-top:16px}
+.upd-box .upd-prog-bar{height:11px}
+.upd-box .upd-status{display:block;margin-top:12px}
+.upd-box .upd-status.err{color:#ff8a94}
+.upd-install-btn{display:none;width:100%;border:none;background:linear-gradient(135deg,#F59E0B,#FBBF24);color:#1A1200;font-weight:800;font-size:15.5px;border-radius:14px;padding:15px 12px;min-height:52px;margin-top:16px;box-shadow:0 10px 26px rgba(245,158,11,.32)}
+.upd-install-btn.show{display:block}
+.upd-retry-btn{display:none;width:100%;border:none;background:linear-gradient(135deg,#F59E0B,#FBBF24);color:#1A1200;font-weight:800;font-size:15px;border-radius:14px;padding:14px 12px;min-height:50px;margin-top:16px}
+.upd-retry-btn.show{display:block}
+.upd-cancel-btn{width:100%;border:1px solid rgba(255,255,255,.22);background:transparent;color:#d8d8dc;font-weight:800;font-size:14px;border-radius:14px;padding:12px;min-height:48px;margin-top:10px}
+.upd-cancel-btn.hide{display:none}
 .admin-tabs{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;margin:14px 0 4px}
 .admin-tabs::-webkit-scrollbar{display:none}
 .admin-tab{flex:0 0 auto;border:1px solid var(--line);background:var(--bg2);color:var(--muted);border-radius:999px;padding:10px 15px;font-weight:800;font-size:13px;white-space:nowrap}
@@ -949,7 +975,7 @@ pre.branch-json{max-height:340px;overflow:auto}
 .fy-actions{position:absolute;right:10px;bottom:104px;z-index:3;display:flex;flex-direction:column;gap:15px;align-items:center}
 .fy-act{background:none;border:none;color:#fff;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:700;min-height:50px;padding:0}
 .fy-act .ic{width:47px;height:47px;border-radius:50%;background:rgba(0,0,0,.5);display:grid;place-items:center;font-size:21px}
-.fy-act.liked .ic{background:#FF2E4C}
+.fy-act.liked .ic{background:rgba(0,0,0,.5)}
 .fy-bottom{position:absolute;left:14px;right:74px;bottom:16px;z-index:3;color:#fff}
 .fy-bottom h3{margin:0 0 4px;font-size:18px;line-height:1.3}
 .fy-bottom p{margin:0 0 10px;color:#E8E8EC;font-size:13px;line-height:1.5}
@@ -1082,7 +1108,7 @@ pre.branch-json{max-height:340px;overflow:auto}
 .bp-player.choice-open .bp-rail,.bp-player.ended .bp-rail{opacity:0;pointer-events:none}
 .bp-act{background:none;border:none;color:#fff;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:700;min-height:50px;padding:0;text-shadow:0 1px 6px rgba(0,0,0,.65)}
 .bp-act .ic{width:47px;height:47px;border-radius:50%;background:rgba(0,0,0,.5);display:grid;place-items:center;font-size:21px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-.bp-act.liked .ic{background:#FF2E4C}
+.bp-act.liked .ic{background:rgba(0,0,0,.5)}
 .bp-act.saved .ic{background:var(--gold)}
 /* Sheets — 3-dot video menu / comments / share (player ke upar bhi khulte hain) */
 .sp-backdrop{position:fixed;inset:0;z-index:690;background:rgba(3,3,6,.62);opacity:0;pointer-events:none;transition:opacity .25s}
@@ -1756,10 +1782,10 @@ body.data-saver .fy-slide img,body.data-saver .bp-player.playing .bp-stage img,b
           <div class="set-row"><div class="set-main"><b id="updLatestLine">A new version is available</b><span id="updNotesLine" style="white-space:pre-line"></span></div></div>
           <div class="upd-prog" id="updProgWrap" style="display:none"><div class="upd-prog-bar"><i id="updProgBar"></i></div><span id="updProgTxt">0%</span></div>
           <p class="upd-status" id="updSetStatus"></p>
-          <button class="set-action" id="updInstallBtn" type="button" style="background:var(--gold);border-color:var(--gold);color:#1A1200;text-align:center">Update Now — Download APK</button>
+          <button class="set-action" id="updInstallBtn" type="button" style="background:var(--gold);border-color:var(--gold);color:#1A1200;text-align:center">Update Now — Install Inside App</button>
         </div>
         <button class="set-action" id="updCheckBtn" type="button">Check for Updates</button>
-        <p class="set-note" style="margin-top:12px">Tapping Update Now downloads the new APK and shows progress. When the download finishes, tap <b>Install</b> once on the file — the new app installs over the old one, no uninstall is needed, and your login, coins and progress stay completely safe.</p>
+        <p class="set-note" style="margin-top:12px">Tapping Update Now downloads the new version <b>right here inside the app</b>, with progress on screen — you are never sent to a browser or the Downloads folder. The moment the download finishes, the <b>Android installer opens inside the app itself</b> — tap Install once and the new app installs over the old one, no uninstall is needed, and your login, coins and progress stay completely safe.</p>
       </div>
     </div>
 
@@ -2064,7 +2090,7 @@ body.data-saver .fy-slide img,body.data-saver .bp-player.playing .bp-stage img,b
 
     <!-- SIDE ACTION RAIL — reels-style Like / Comment / Share / Save -->
     <div class="bp-rail" id="bpRail">
-      <button class="bp-act" data-eng-like="current-story" type="button" aria-label="Like"><span class="ic">❤️</span><span data-eng-likecount="current-story">0</span></button>
+      <button class="bp-act" data-eng-like="current-story" type="button" aria-label="Like" aria-pressed="false"><span class="ic heart-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></span><span data-eng-likecount="current-story">0</span></button>
       <button class="bp-act" data-eng-comment="current-story" type="button" aria-label="Open comments"><span class="ic">💬</span><span data-eng-commentcount="current-story">0</span></button>
       <button class="bp-act" data-eng-share="current-story" type="button" aria-label="Share"><span class="ic">↗</span><span>Share</span></button>
       <button class="bp-act" data-eng-save="current-story" type="button" aria-label="Save"><span class="ic">🔖</span><span>Save</span></button>
@@ -2153,12 +2179,27 @@ body.data-saver .fy-slide img,body.data-saver .bp-player.playing .bp-stage img,b
 <div class="sp-sheet" id="shareSheet" aria-hidden="true" role="dialog" aria-label="Share">
   <div class="sp-sheet-head"><b>↗ Share</b><button class="sp-sheet-x" data-sp-close type="button" aria-label="Close">✕</button></div>
   <p class="vm-status" id="shareTitle">StoryPlay</p>
-  <button class="vm-opt" id="shareNative" type="button"><span class="vm-opt-t">📤 Share… <small>using your phone's share options</small></span></button>
-  <button class="vm-opt" id="shareWhats" type="button"><span class="vm-opt-t">🟢 WhatsApp <small>send on WhatsApp</small></span></button>
-  <button class="vm-opt" id="shareCopy" type="button"><span class="vm-opt-t">📋 Copy Text <small>copy the share text</small></span></button>
+  <button class="vm-opt" id="shareWhats" type="button"><span class="vm-opt-t">🟢 WhatsApp <small>share this story on WhatsApp</small></span></button>
+  <button class="vm-opt" id="shareTelegram" type="button"><span class="vm-opt-t">✈️ Telegram <small>share this story on Telegram</small></span></button>
+  <button class="vm-opt" id="shareCopy" type="button"><span class="vm-opt-t">📋 Copy <small>copy the story's share text — paste it anywhere</small></span></button>
 </div>
 
 <div class="toast" id="toast">Link copied</div>
+
+<!-- IN-APP UPDATE — download aur installer dono app ke andar hi: koi browser nahi, koi Downloads folder nahi -->
+<div class="upd-modal" id="updModal" role="dialog" aria-modal="true" aria-label="App update">
+  <div class="upd-box">
+    <span class="upd-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4v11m0 0l-4.2-4.2M12 15l4.2-4.2M4.5 19.5h15"/></svg></span>
+    <h3 id="updModalTitle">Updating StoryPlay</h3>
+    <p class="upd-ver" id="updModalVer"></p>
+    <p class="upd-detail" id="updModalDetail">The update downloads right here inside the app — please stay on this screen.</p>
+    <div class="upd-prog" id="updModalProgWrap"><div class="upd-prog-bar"><i id="updModalProgBar"></i></div><span id="updModalProgTxt">0%</span></div>
+    <p class="upd-status" id="updModalStatus"></p>
+    <button class="upd-install-btn" id="updModalInstall" type="button">Install Now</button>
+    <button class="upd-retry-btn" id="updModalRetry" type="button">Retry Download</button>
+    <button class="upd-cancel-btn" id="updModalCancel" type="button">Cancel</button>
+  </div>
+</div>
 
 <!-- FLOATING MINI-PLAYER — hidden until a real episode has been played -->
 <div class="mini-player hide" id="miniPlayer" aria-label="Continue watching">
@@ -2840,7 +2881,7 @@ function buildReels(sid){
         +lockHtml
         +'<div class="pause-ind"><span>▶</span></div>'
         +'<div class="reel-actions">'
-        +'<button class="action-btn like-btn '+(liked?'liked':'')+'"><span class="ic">❤️</span><span class="like-count">'+fmt(likeCount)+'</span></button>'
+        +'<button class="action-btn like-btn '+(liked?'liked':'')+'" aria-label="Like" aria-pressed="'+(liked?'true':'false')+'"><span class="ic heart-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></span><span class="like-count">'+fmt(likeCount)+'</span></button>'
         +'<button class="action-btn comment-btn"><span class="ic">💬</span><span>'+((typeof SP_ENGAGE!=='undefined'&&SP_ENGAGE.comments[sid])?SP_ENGAGE.comments[sid].length:0)+'</span></button>'
         +'<button class="action-btn share-btn"><span class="ic">↗</span><span>Share</span></button>'
         +'<button class="action-btn save-btn"><span class="ic">🔖</span><span>Save</span></button>'
@@ -2853,8 +2894,8 @@ function buildReels(sid){
       var unlockBtn=slide.querySelector('.unlock-btn');
       if(unlockBtn){ unlockBtn.addEventListener('click',function(e){ e.stopPropagation(); unlockEpisode(sid,idx); }); }
       slide.addEventListener('click',function(e){ if(e.target.closest('.action-btn')||e.target.closest('.lock-overlay')) return; if(!isEpUnlocked(sid,idx)) return; togglePause(slide); });
-      slide.querySelector('.like-btn').addEventListener('click',function(){ var btn=this; if(typeof spEngageToggleLike==='function'){ spEngageToggleLike(sid); var on=!!SP_ENGAGE.liked[sid]; btn.classList.toggle('liked',on); btn.querySelector('.like-count').textContent=on?'1':'0'; } });
-      slide.querySelector('.share-btn').addEventListener('click',function(){ var txt=s.title+' EP '+(idx+1)+' on StoryPlay'; if(navigator.share){ navigator.share({title:s.title,text:txt}).catch(function(){}); } else if(navigator.clipboard){ navigator.clipboard.writeText(txt).then(function(){showToast('Link copied — ready to share')}); } else showToast('Share: '+txt); });
+      slide.querySelector('.like-btn').addEventListener('click',function(){ var btn=this; if(typeof spEngageToggleLike==='function'){ spEngageToggleLike(sid); var on=!!SP_ENGAGE.liked[sid]; btn.classList.toggle('liked',on); btn.setAttribute('aria-pressed',on?'true':'false'); btn.querySelector('.like-count').textContent=on?'1':'0'; } });
+      slide.querySelector('.share-btn').addEventListener('click',function(){ if(typeof spOpenShare==='function'){ spOpenShare(sid); } else { showToast('Share: '+s.title+' EP '+(idx+1)+' on StoryPlay'); } });
       slide.querySelector('.comment-btn').addEventListener('click',function(){ if(typeof spOpenComments==='function') spOpenComments(sid); });
       slide.querySelector('.save-btn').addEventListener('click',function(){ if(typeof spEngageToggleSave==='function'){ spEngageToggleSave(sid); this.classList.toggle('saved',!!SP_ENGAGE.saved[sid]); } });
       slide.querySelector('.next-btn').addEventListener('click',function(){ goToEp(idx+1,true); });
@@ -3872,7 +3913,7 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&bpPlayer.c
 
   var qaW=document.getElementById('qaWallet'); if(qaW) qaW.addEventListener('click',function(){ showView('rewards'); });
   var qaL=document.getElementById('qaLanguage'); if(qaL) qaL.addEventListener('click',function(){ showView('settings'); });
-  var notes={History:'History — the stories you have watched are shown here. Tap any poster and the story plays from there.',Saved:'Saved — the stories you save appear here. Tap 🔖 Save in the For You feed.',Like:'Like — stories you liked are shown here. Tap ❤️ in the trailer feed to like.','My Novels':'My Novels — your novel list is empty right now.','My Stories':'My Stories — your own list. Stories are published only by the Owner; uploads do not happen inside this app.'};
+  var notes={History:'History — the stories you have watched are shown here. Tap any poster and the story plays from there.',Saved:'Saved — the stories you save appear here. Tap 🔖 Save in the For You feed.',Like:'Like — stories you liked are shown here. Tap the ♡ heart in the trailer feed to like — it turns red.','My Novels':'My Novels — your novel list is empty right now.','My Stories':'My Stories — your own list. Stories are published only by the Owner; uploads do not happen inside this app.'};
   document.querySelectorAll('.prof-tab').forEach(function(t){ t.addEventListener('click',function(){ document.querySelectorAll('.prof-tab').forEach(function(x){x.classList.remove('active');}); t.classList.add('active'); var n=document.getElementById('profileTabNote'); if(n) n.textContent=notes[t.getAttribute('data-ptab')]||notes.History; }); });
   document.querySelectorAll('[data-pfilter]').forEach(function(b){ b.addEventListener('click',function(){ document.querySelectorAll('[data-pfilter]').forEach(function(x){x.classList.remove('active');}); b.classList.add('active'); toast('Filter: '+b.getAttribute('data-pfilter')+' — the History grid is showing this category'); }); });
   var fb=document.getElementById('profFilterBtn'); if(fb) fb.addEventListener('click',function(){ toast('Filter — choose from Drama / Anime / Novel'); });
@@ -4009,7 +4050,7 @@ document.getElementById('deleteAccountBtn').addEventListener('click',function(){
 var libEmptyStates={
   History:{t:'You haven\'t watched anything yet',x:'Your watch history is empty. When you play a story, it will appear here automatically — no made-up records are shown.'},
   Saved:{t:'Nothing saved yet',x:'You haven\'t saved any story yet. Tap 🔖 Save in the For You feed and it will appear here.'},
-  Like:{t:'Nothing liked yet',x:'You haven\'t liked any trailer yet. Tap ❤️ in the For You feed and it will appear here.'},
+  Like:{t:'Nothing liked yet',x:'You haven\'t liked any trailer yet. Tap the ♡ heart in the For You feed — it turns red when liked — and it will appear here.'},
   'My Novels':{t:'No novels yet',x:'Your novel list is empty (0).'},
   'My Stories':{t:'You have no stories yet',x:'Stories are published only by the Owner — uploads do not happen inside this app, so there is nothing here.'}
 };
@@ -4911,7 +4952,7 @@ function spEngageSync(key){
   var cc=(SP_ENGAGE.comments[key]||[]).length;
   document.querySelectorAll('[data-eng-likecount="'+key+'"]').forEach(function(el){ el.textContent=liked?'1':'0'; });
   document.querySelectorAll('[data-eng-commentcount="'+key+'"]').forEach(function(el){ el.textContent=String(cc); });
-  document.querySelectorAll('[data-eng-like="'+key+'"]').forEach(function(b){ b.classList.toggle('liked',liked); });
+  document.querySelectorAll('[data-eng-like="'+key+'"]').forEach(function(b){ b.classList.toggle('liked',liked); b.setAttribute('aria-pressed',liked?'true':'false'); });
   document.querySelectorAll('[data-eng-save="'+key+'"]').forEach(function(b){ b.classList.toggle('saved',saved); });
   if(spCmtKey===key){ var c=document.getElementById('cmtCount'); if(c) c.textContent=String(cc); }
 }
@@ -4976,14 +5017,17 @@ function spOpenShare(key){
 }
 function spCopyShare(){
   var txt=spShareText(spShareKey);
-  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(function(){ showToast('📋 Share text copied'); },function(){ showToast(txt); }); }
-  else showToast(txt);
+  function done(){ showToast('🔗 Link copied'); spCloseSheets(); }
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done,function(){ showToast(txt); }); }
+  else{
+    var ta=document.createElement('textarea'); ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); done(); }catch(e){ showToast(txt); }
+    document.body.removeChild(ta);
+  }
 }
-var shN=document.getElementById('shareNative'); if(shN) shN.addEventListener('click',function(){
-  if(navigator.share){ navigator.share({title:spStoryTitle(spShareKey),text:spShareText(spShareKey)}).catch(function(){}); }
-  else spCopyShare();
-});
-var shW=document.getElementById('shareWhats'); if(shW) shW.addEventListener('click',function(){ window.open('https://wa.me/?text='+encodeURIComponent(spShareText(spShareKey)),'_blank'); });
+var shW=document.getElementById('shareWhats'); if(shW) shW.addEventListener('click',function(){ window.open('https://wa.me/?text='+encodeURIComponent(spShareText(spShareKey)),'_blank'); spCloseSheets(); });
+var shT=document.getElementById('shareTelegram'); if(shT) shT.addEventListener('click',function(){ var txt=spShareText(spShareKey); window.open('https://t.me/share/url?url='+encodeURIComponent(txt)+'&text='+encodeURIComponent(spStoryTitle(spShareKey)+' on StoryPlay'),'_blank'); spCloseSheets(); });
 var shC=document.getElementById('shareCopy'); if(shC) shC.addEventListener('click',spCopyShare);
 
 /* ---------- Rail buttons (For You + player) — ek hi delegation ---------- */
@@ -5130,11 +5174,16 @@ spRenderLib();
        bulata hai;
    (2) GitHub Releases (uvraj1/storyplay) ka latest release.
    Naya version milne par Home par saaf 'Naya Update Available'
-   card aata hai — 'Update Karo' dabane par APK progress (%)
-   ke saath download hoti hai; download ke baad file par ek
-   baar Install dabana hota hai aur nayi app purani ke upar hi
-   install ho jati hai — uninstall nahi karna padta, login /
-   coins / progress safe rehte hain.
+   card aata hai — 'Update Now' dabane par download APP KE ANDAR
+   HI ek in-app update screen par progress (%) ke saath hota hai;
+   user ko browser ya Downloads folder me KABHI nahi bheja jata.
+   Download poora hote hi Android installer app ke andar se hi
+   khulta hai (native bridge mile to usi se, warna in-app rakhe
+   gaye APK blob se isi WebView ke andar) — ek baar Install
+   dabane par nayi app purani ke upar hi install ho jati hai —
+   uninstall nahi karna padta, login / coins / progress safe
+   rehte hain. Download fail ho to Retry bhi app ke andar hi
+   milta hai, browser fallback nahi.
    'Baad me' dabane par usi version ke liye card 20 ghante tak
    nahi dikhta — agle din ya agle launch par phir yaad dilata
    hai; usse naya version aate hi card turant dikhta hai.
@@ -5167,7 +5216,7 @@ spRenderLib();
 
   function setStatus(msg){ var s=$('updStatus'); if(s) s.textContent=msg; }
   function setProgress(pct){
-    [['updCardProgWrap','updCardProgBar','updCardProgTxt'],['updProgWrap','updProgBar','updProgTxt']].forEach(function(t){
+    [['updCardProgWrap','updCardProgBar','updCardProgTxt'],['updProgWrap','updProgBar','updProgTxt'],['updModalProgWrap','updModalProgBar','updModalProgTxt']].forEach(function(t){
       var w=$(t[0]); if(!w) return;
       if(pct===null){ w.style.display='none'; return; }
       w.style.display='flex';
@@ -5253,52 +5302,144 @@ spRenderLib();
   }
   window.spUpdateCheck=checkNow;
 
+  /* ===== IN-APP DOWNLOAD + INSTALLER — sab kuch app ke andar hi =====
+     Download XHR se app ke andar hi hota hai aur APK blob memory me
+     rehta hai — na browser khulta hai, na file Downloads folder me
+     jaati hai. Download poora hote hi installer app ke andar se hi
+     khulta hai:
+       1) Native bridge (Android wrapper) mile to usi ko install ke
+          liye APK URL de dete hain — wrapper khud installer kholta hai.
+       2) Warna in-app blob ko ISI WebView ke andar kholte hain —
+          Android wrapper use seedha system installer ko de deta hai.
+     Fail hone par bhi user app ke andar hi rehta hai — Retry yahin
+     milta hai, browser fallback bilkul nahi hai. */
+  var updXhr=null, updBlobUrl='', updReady=false;
+
+  function fmtMB(n){ return (n/1048576).toFixed(1)+' MB'; }
+  function openUpdModal(){
+    var m=$('updModal'); if(m) m.classList.add('open');
+    var v=$('updModalVer'); if(v) v.textContent='StoryPlay v'+info.version+'  •  you are on v'+APP_VERSION;
+    if(typeof spNavPush==='function'&&typeof spNavHas==='function'&&!spNavHas('upd-modal')) spNavPush('upd-modal',closeUpdModal);
+  }
+  function closeUpdModal(){
+    if(downloading&&updXhr){ try{ updXhr.abort(); }catch(e){} }
+    downloading=false; updXhr=null;
+    var m=$('updModal'); if(m) m.classList.remove('open');
+    restoreUpdBtns(); setProgress(null);
+    if(typeof spNavRemove==='function') spNavRemove('upd-modal');
+  }
+  function restoreUpdBtns(){
+    var cb=$('updCardBtn'); if(cb){ cb.disabled=false; cb.textContent=updReady?'Install Now':'Update Now'; }
+    var ib=$('updInstallBtn'); if(ib){ ib.disabled=false; ib.textContent=updReady?'Install Now — Opens Inside App':'Update Now — Install Inside App'; }
+  }
+  function setModalState(state,msg){
+    var st=$('updModalStatus');
+    if(st){ st.textContent=msg||''; st.classList.toggle('show',!!msg); st.classList.toggle('err',state==='error'); }
+    var ins=$('updModalInstall'); if(ins) ins.classList.toggle('show',state==='ready');
+    var ret=$('updModalRetry'); if(ret) ret.classList.toggle('show',state==='error');
+    var can=$('updModalCancel'); if(can){ can.textContent=(state==='ready')?'Later':'Cancel'; can.classList.toggle('hide',false); }
+    var det=$('updModalDetail');
+    if(det){
+      if(state==='ready') det.textContent='Download complete. Tap Install Now — the Android installer opens right here, inside the app.';
+      else if(state==='error') det.textContent='You are still inside the app — nothing opened outside. Check your internet and tap Retry.';
+      else det.textContent='The update downloads right here inside the app — please stay on this screen.';
+    }
+  }
+
+  function launchInstaller(){
+    if(!updReady) return;
+    setModalState('ready','Opening the installer inside the app…');
+    setDlStatus('Opening the installer inside the app…');
+    /* 1) Native bridge — Android wrapper ke andar installer khulta hai */
+    try{
+      var bridges=[window.StoryPlayNative,window.AndroidBridge,window.AndroidUpdater,window.Android];
+      for(var i=0;i<bridges.length;i++){
+        var b=bridges[i]; if(!b) continue;
+        var fn=b.installApkFromUrl||b.installApk||b.downloadAndInstall||b.openInstaller;
+        if(typeof fn==='function'){ fn.call(b,info.apkUrl); setModalState('ready','✓ Installer opened — tap Install on the Android screen to finish. The new version installs over this app; your login and progress stay safe.'); return; }
+      }
+      var cap=window.Capacitor&&window.Capacitor.Plugins;
+      if(cap){
+        var plug=cap.StoryPlayUpdater||cap.AppUpdate||cap.ApkInstaller;
+        if(plug&&typeof plug.install==='function'){ plug.install({url:info.apkUrl}); setModalState('ready','✓ Installer opened — tap Install on the Android screen to finish. The new version installs over this app; your login and progress stay safe.'); return; }
+      }
+    }catch(e){}
+    /* 2) In-app blob — ISI WebView ke andar kholo (koi download attribute
+          nahi, koi _blank nahi): Android wrapper APK ko pehchan kar
+          system installer isi app ke andar se khol deta hai. */
+    if(updBlobUrl){
+      try{
+        var a=document.createElement('a');
+        a.href=updBlobUrl;
+        a.type='application/vnd.android.package-archive';
+        document.body.appendChild(a); a.click();
+        setTimeout(function(){ try{ document.body.removeChild(a); }catch(e){} },1500);
+        setModalState('ready','✓ Installer opening inside the app — tap Install to finish. If Android asks to allow installs from StoryPlay, tap Allow and the installer opens right here.');
+        setDlStatus('✓ Download complete — the installer is opening inside the app. Tap Install to finish.');
+        return;
+      }catch(e){}
+    }
+    setModalState('ready','Download is ready inside the app. Tap Install Now and the installer will open right here.');
+  }
+
   function startDownload(){
-    if(!hasUpdate()||downloading) return;
+    if(downloading) return;
+    if(updReady){ openUpdModal(); setModalState('ready','Download complete — tap Install Now and the installer opens right here, inside the app.'); launchInstaller(); return; }
+    if(!hasUpdate()) return;
     if(!info.apkUrl){
-      if(info.pageUrl){ window.open(info.pageUrl,'_blank'); toast('The release page has opened — download the APK from there'); }
-      else{ setDlStatus('This update\'s APK link is not available yet — check again in a little while.'); toast('⚠️ This update\'s APK link is not available yet'); }
+      /* Koi bahari page/release link NAHI khulega — user app ke andar hi rehta hai */
+      openUpdModal(); setProgress(null);
+      setModalState('error','This update\'s APK link is not available yet — check again in a little while.');
+      setDlStatus('This update\'s APK link is not available yet — check again in a little while.');
+      toast('⚠️ This update\'s APK link is not available yet');
       return;
     }
-    downloading=true;
-    setDlStatus('Starting download…');
+    downloading=true; updReady=false;
+    openUpdModal();
+    setModalState('downloading','Starting download…');
+    setDlStatus('Downloading inside the app…');
     setProgress(0);
     var card=$('updCard'); if(card) card.classList.add('show');
     var btns=[$('updCardBtn'),$('updInstallBtn')];
-    function btnState(disabled,label){
-      btns.forEach(function(b){ if(b){ b.disabled=disabled; if(label) b.textContent=label; } });
-    }
-    btnState(true,'Downloading…');
-    function restoreBtns(){
-      var cb=$('updCardBtn'); if(cb){ cb.disabled=false; cb.textContent='Update Now'; }
-      var ib=$('updInstallBtn'); if(ib){ ib.disabled=false; ib.textContent='Update Now — Download APK'; }
-    }
+    btns.forEach(function(b){ if(b){ b.disabled=true; b.textContent='Downloading…'; } });
     function fail(msg){
-      downloading=false; restoreBtns(); setProgress(null);
-      setDlStatus(msg+' Starting the download directly from the browser…');
-      try{ window.open(info.apkUrl,'_blank'); }catch(e){}
+      downloading=false; updXhr=null; restoreUpdBtns(); setProgress(null);
+      setModalState('error',msg+' Tap Retry to download again — right here inside the app.');
+      setDlStatus(msg+' Tap Retry inside the app to try again.');
     }
     try{
-      var xhr=new XMLHttpRequest();
+      var xhr=new XMLHttpRequest(); updXhr=xhr;
       xhr.open('GET',info.apkUrl,true);
       xhr.responseType='blob';
-      xhr.onprogress=function(ev){ if(ev.lengthComputable&&ev.total>0) setProgress(Math.min(99,Math.round(ev.loaded/ev.total*100))); };
+      xhr.onprogress=function(ev){
+        if(ev.lengthComputable&&ev.total>0){
+          var pct=Math.min(99,Math.round(ev.loaded/ev.total*100));
+          setProgress(pct);
+          setModalState('downloading','Downloading inside the app… '+fmtMB(ev.loaded)+' of '+fmtMB(ev.total));
+        }else{
+          setModalState('downloading','Downloading inside the app…');
+        }
+      };
       xhr.onload=function(){
         if(xhr.status<200||xhr.status>=300){ fail('The download stopped midway (HTTP '+xhr.status+').'); return; }
         setProgress(100);
-        var url=URL.createObjectURL(xhr.response);
-        var a=document.createElement('a');
-        a.href=url; a.download='StoryPlay-v'+info.version+'.apk';
-        document.body.appendChild(a); a.click();
-        setTimeout(function(){ try{ document.body.removeChild(a); URL.revokeObjectURL(url); }catch(e){} },4000);
-        downloading=false; restoreBtns();
-        setDlStatus('✓ Download complete — in Downloads you will find StoryPlay-v'+info.version+'.apk. Open it and tap Install. The update installs over the old app — no uninstall needed.');
-        toast('✓ APK downloaded — open the file and tap Install');
+        if(updBlobUrl){ try{ URL.revokeObjectURL(updBlobUrl); }catch(e){} }
+        updBlobUrl=URL.createObjectURL(xhr.response);
+        downloading=false; updXhr=null; updReady=true; restoreUpdBtns();
+        setModalState('ready','✓ Download complete — opening the installer inside the app…');
+        setDlStatus('✓ Download complete — the installer is opening inside the app. Tap Install to finish; no uninstall needed.');
+        toast('✓ Update downloaded — installer opening inside the app');
+        setTimeout(launchInstaller,450);
       };
       xhr.onerror=function(){ fail('Network error — the download could not be completed.'); };
+      xhr.onabort=function(){ downloading=false; updXhr=null; };
       xhr.send();
     }catch(e){ fail('The download could not start.'); }
   }
+
+  var updMC=$('updModalCancel'); if(updMC) updMC.addEventListener('click',closeUpdModal);
+  var updMI=$('updModalInstall'); if(updMI) updMI.addEventListener('click',launchInstaller);
+  var updMR=$('updModalRetry'); if(updMR) updMR.addEventListener('click',function(){ setProgress(0); startDownload(); });
 
   var cb=$('updCardBtn'); if(cb) cb.addEventListener('click',startDownload);
   var ib=$('updInstallBtn'); if(ib) ib.addEventListener('click',startDownload);
