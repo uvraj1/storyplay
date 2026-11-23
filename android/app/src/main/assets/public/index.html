@@ -25,7 +25,10 @@
   --sar:env(safe-area-inset-right, 0px);
   --dock-h:72px; /* dock ki kul height: 8px padding + 56px button + 8px padding */
   --dock-gap:14px; /* dock ke neeche ki khaali jagah — system nav buttons ke upar */
-  --dock-clear:calc(var(--sab) + var(--dock-gap) + var(--dock-h) + 20px); /* scroll content ke liye neeche ki kul clearance, taaki aakhri row dock ke peeche na chhupe */
+  /* Dock ab layout ke ANDAR hai (floating overlay nahi) — scroll area dock ke UPAR khatm hota hai,
+     isliye koi bhi row/card/text dock ke peeche chhup hi nahi sakta. Scroll ke aakhir me bas
+     itni si saans ki jagah chahiye: */
+  --dock-clear:26px;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -770,8 +773,10 @@ pre.branch-json{max-height:340px;overflow:auto}
 .be-help-steps b{display:block;font-size:14px}
 .be-help-steps p{margin:2px 0 0;color:var(--muted);font-size:13px;line-height:1.55}
 
-/* FLOATING GLASS DOCK — margin 16px, radius 28px, blur */
-.bottomnav{position:fixed;left:calc(var(--sal) + 16px);right:calc(var(--sar) + 16px);bottom:calc(var(--sab) + var(--dock-gap));z-index:60;max-width:528px;margin:0 auto;background:rgba(18,19,28,.62);backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);border:1px solid rgba(255,255,255,.14);border-radius:28px;padding:8px 10px;box-shadow:0 18px 44px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.14)}
+/* GLASS DOCK — layout ke andar fixed footer (body flex column ka aakhri hissa): hamesha dikhta hai,
+   lekin scroll hone wala content iske UPAR hi khatm hota hai — koi row/card/text iske peeche
+   chhup nahi sakta, kisi bhi screen par, kisi bhi scroll position par. */
+.bottomnav{position:relative;flex:0 0 auto;width:min(528px,calc(100% - 32px));margin:6px auto calc(var(--sab) + var(--dock-gap));z-index:60;background:rgba(18,19,28,.62);backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);border:1px solid rgba(255,255,255,.14);border-radius:28px;padding:8px 10px;box-shadow:0 18px 44px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.14)}
 .bottomnav-in{max-width:var(--col);margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:2px;align-items:center}
 .bnav-btn{border:none;background:transparent;color:#9A9BA8;border-radius:18px;padding:7px 2px 5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:12px;font-weight:700;min-height:56px;letter-spacing:.01em}
 .bnav-btn svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
@@ -822,7 +827,7 @@ pre.branch-json{max-height:340px;overflow:auto}
   .all-grid,.story-grid{gap:12px 9px}
   .card-meta{padding:9px 9px 11px}
   .card-meta h3{font-size:14.5px}
-  .bottomnav{left:calc(var(--sal) + 10px);right:calc(var(--sar) + 10px)}
+  .bottomnav{width:calc(100% - 20px)}
   .bnav-btn{font-size:11px}
   .ep-grid{grid-template-columns:repeat(5,1fr)}
 }
@@ -864,9 +869,10 @@ pre.branch-json{max-height:340px;overflow:auto}
 .vip-perk b{display:block;font-size:13.5px;line-height:1.3;color:#5A3A08}
 .vip-perk span{display:block;font-size:13.5px;line-height:1.3;color:#5A3A08}
 .vip-activate{width:100%;margin-top:14px;border:none;border-radius:14px;background:linear-gradient(90deg,#FF8A00,#FF6A00);color:#3A1E00;font-size:19px;font-weight:800;padding:14px;box-shadow:0 10px 22px rgba(255,106,0,.35)}
-.qa-row{display:flex;gap:10px;overflow-x:auto;padding:16px 2px 4px;scrollbar-width:none}
-.qa-row::-webkit-scrollbar{display:none}
-.qa-card{flex:0 0 118px;border:1px solid rgba(255,255,255,.09);background:#1C1C22;color:#fff;border-radius:16px;padding:16px 8px 13px;display:flex;flex-direction:column;align-items:center;gap:9px;font-weight:700;font-size:14px;min-height:92px}
+/* PROFILE QUICK CARDS — 4 ke 4 cards ek hi row me screen ki width ke ANDAR fit hote hain:
+   koi horizontal scroll nahi, koi card right edge se kata nahi ('My Wallet' pura dikhta hai) */
+.qa-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:16px 0 4px}
+.qa-card{min-width:0;width:100%;border:1px solid rgba(255,255,255,.09);background:#1C1C22;color:#fff;border-radius:16px;padding:14px 2px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:12px;line-height:1.25;text-align:center;overflow-wrap:break-word;min-height:88px}
 .qa-card svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .prof-tabs{display:flex;gap:26px;overflow-x:auto;scrollbar-width:none;padding:18px 2px 0;border-bottom:1px solid rgba(255,255,255,.07)}
 .prof-tabs::-webkit-scrollbar{display:none}
@@ -912,6 +918,9 @@ pre.branch-json{max-height:340px;overflow:auto}
 .all-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px 12px;align-items:start}
 .all-grid .story-card{width:100%;text-align:left;font:inherit;color:#fff}
 .all-grid .card-meta{display:block}
+/* HOME STORY CARD TITLE — pura title dikhega, beech me '...' se katega nahi:
+   line-clamp hata kar title ko jitni lines chahiye utni me wrap hone do */
+.all-grid .card-meta h3{display:block;overflow:visible;font-size:15.5px;line-height:1.35}
 /* ===== HOME — Backend sync bar, sync panel, story count ===== */
 .sync-bar{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);border-radius:16px;padding:10px 12px;margin-bottom:14px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:inset 0 1px 0 rgba(255,255,255,.09)}
 .sync-chip{display:flex;align-items:center;gap:9px;flex:1;min-width:0;font-size:13px;line-height:1.45;color:#EDEEF2}
@@ -973,6 +982,12 @@ pre.branch-json{max-height:340px;overflow:auto}
 
 /* ===== SETTINGS — screenshot-style professional list (black, bade rows, chevron, Sign out, Version) ===== */
 .set-head{display:flex;align-items:center;gap:8px;padding:2px 0 10px}
+/* SAFE-AREA TOP — Settings ki har screen (main list + saari sub-screens) aur Profile ka top bar
+   .wrap ke ANDAR hain aur unke upar apphead nahi hota; isliye unka header phone ki asli status bar
+   ke NEECHE se shuru hoga — title/back arrow kabhi kate nahi. (Sign In par apphead dikhta hai,
+   wahi inset deta hai, isliye wahan ye rule nahi lagta.) */
+#view-settings .set-head{padding-top:calc(var(--sat) + 12px)}
+#view-profile .prof-topbar{padding-top:calc(var(--sat) + 10px)}
 .set-head h2{flex:1;text-align:center;font-family:Manrope,sans-serif;font-size:21px;font-weight:700;margin:0}
 .set-back{width:44px;height:44px;min-height:44px;border:none;background:transparent;color:#fff;display:grid;place-items:center;padding:0}
 .set-back svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
@@ -2089,6 +2104,28 @@ body.data-saver .fy-slide img,body.data-saver .bp-player.playing .bp-stage img,b
   </div>
 </nav>
 
+<script>
+/* SAFE-AREA FALLBACK — kuch Android WebView env(safe-area-inset-*) ki value 0 dete hain,
+   jabki page ka content phone ki asli status bar / navigation bar ke neeche tak jata hai.
+   Wahan header kata hua dikhta hai. App ke andar (Capacitor / WebView / standalone) agar
+   asal inset 0 aaye to kam se kam status-bar jitni jagah pakki set kar do — taaki har
+   screen ka header hamesha status bar ke NEECHE se shuru ho. Normal browser me kuch nahi badalta. */
+(function(){
+  try{
+    var ua=navigator.userAgent||'';
+    var inApp=!!window.Capacitor||!!window.cordova||/;\s*wv\)/.test(ua)||(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone===true;
+    if(!inApp||!document.body) return;
+    var probe=document.createElement('div');
+    probe.style.cssText='position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;pointer-events:none;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)';
+    document.body.appendChild(probe);
+    var cs=window.getComputedStyle(probe);
+    var sat=parseFloat(cs.paddingTop)||0, sab=parseFloat(cs.paddingBottom)||0;
+    probe.parentNode.removeChild(probe);
+    if(sat<20) document.documentElement.style.setProperty('--sat','30px');
+    if(sab<8) document.documentElement.style.setProperty('--sab','12px');
+  }catch(e){}
+})();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js"></script>
 <script>
