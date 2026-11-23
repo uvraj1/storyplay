@@ -1250,21 +1250,8 @@ body.data-saver .fy-slide img,body.data-saver .bp-player.playing .bp-stage img,b
     <div class="app-banner gold" id="appWideBanner" role="status"><span id="appWideBannerText"></span><button type="button" id="appWideBannerDismiss">Got it</button></div>
 
     <div class="home-scroll">
-    <!-- AUTO-UPDATE CARD — sirf tab dikhta hai jab asal naya version mila ho aur user ne
-         us version ke liye 'Baad me' na kaha ho; baaki samay poori tarah chhupa rehta hai -->
-    <div class="upd-card" id="updCard" role="status">
-      <div class="upd-head">
-        <span class="upd-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4v11m0 0l-4.2-4.2M12 15l4.2-4.2M4.5 19.5h15"/></svg></span>
-        <div class="upd-titles"><b>New Update Available</b><span id="updCardVer">A new version is available</span></div>
-      </div>
-      <p class="upd-notes" id="updCardNotes"></p>
-      <div class="upd-prog" id="updCardProgWrap" style="display:none"><div class="upd-prog-bar"><i id="updCardProgBar"></i></div><span id="updCardProgTxt">0%</span></div>
-      <p class="upd-status" id="updCardStatus"></p>
-      <div class="upd-actions">
-        <button class="upd-btn" id="updCardBtn" type="button">Update Now</button>
-        <button class="upd-btn ghost" id="updCardLater" type="button">Later</button>
-      </div>
-    </div>
+    <!-- UPDATE UI Home par NAHI hai — update sirf Settings → App Update me rehta hai,
+         aur Auto-Update ON hone par naya version khud download + install hota hai -->
     <!-- ALL STORIES — ek hi shared story source (Backend catalog) se render hoti hai -->
     <div class="section-head" style="margin-top:2px">
       <div><h2>All Stories</h2></div>
@@ -1511,9 +1498,9 @@ body.data-saver .fy-slide img,body.data-saver .bp-player.playing .bp-stage img,b
       <div class="slist">
         <button class="srow" data-set-screen="privacy" type="button"><span>Privacy Policy</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
         <button class="srow" data-set-screen="terms" type="button"><span>Terms of Use</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
-        <button class="srow" data-set-screen="update" type="button"><span>Check for Updates</span><span class="sval" id="updRowVal">v1.0.4</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+        <button class="srow" data-set-screen="update" type="button"><span>Check for Updates</span><span class="sval" id="updRowVal">v1.0.5</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
       </div>
-      <p class="version-line">Version 1.0.4</p>
+      <p class="version-line">Version 1.0.5</p>
 
       <button class="signout-btn" id="logoutBtn" type="button">Sign out</button>
     </div>
@@ -1802,17 +1789,17 @@ body.data-saver .fy-slide img,body.data-saver .bp-player.playing .bp-stage img,b
         <span class="set-head-spacer" aria-hidden="true"></span>
       </div>
       <div class="set-sub-body">
-        <div class="set-row"><div class="set-main"><b>Current Version</b><span>This is the version currently running on your phone</span></div><span class="sval" style="margin-left:auto">v1.0.4</span></div>
-        <div class="set-row"><div class="set-main"><b>Auto-Update</b><span>ON = the app checks for a new version on launch and whenever the internet is available, and shows an update card on Home when one is found. OFF = updates are checked only manually here</span></div><button class="switch on" id="setAutoUpdateToggle" type="button" role="switch" aria-checked="true" aria-label="Auto update on off"></button></div>
-        <p class="set-note" id="updStatus" style="margin-top:12px">The app checks for updates by itself on every launch. To check manually at any time, tap the button below.</p>
+        <div class="set-row"><div class="set-main"><b>Current Version</b><span>This is the version currently running on your phone</span></div><span class="sval" style="margin-left:auto">v1.0.5</span></div>
+        <div class="set-row"><div class="set-main"><b>Auto-Update</b><span>ON = when a new version arrives, the app downloads and installs it by itself — you don't have to tap anything here or on Home. OFF = updates are checked only when you tap Check for Updates on this screen</span></div><button class="switch on" id="setAutoUpdateToggle" type="button" role="switch" aria-checked="true" aria-label="Auto update on off"></button></div>
+        <p class="set-note" id="updStatus" style="margin-top:12px">Updates are automatic — the app checks on every launch and installs new versions by itself. You can also check manually any time with the button below.</p>
         <div id="updAvailBox" style="display:none">
           <div class="set-row"><div class="set-main"><b id="updLatestLine">A new version is available</b><span id="updNotesLine" style="white-space:pre-line"></span></div></div>
           <div class="upd-prog" id="updProgWrap" style="display:none"><div class="upd-prog-bar"><i id="updProgBar"></i></div><span id="updProgTxt">0%</span></div>
           <p class="upd-status" id="updSetStatus"></p>
-          <button class="set-action" id="updInstallBtn" type="button" style="background:var(--gold);border-color:var(--gold);color:#1A1200;text-align:center">Update Now — Install Inside App</button>
+          <button class="set-action" id="updInstallBtn" type="button" style="background:var(--gold);border-color:var(--gold);color:#1A1200;text-align:center">Update Now</button>
         </div>
         <button class="set-action" id="updCheckBtn" type="button">Check for Updates</button>
-        <p class="set-note" style="margin-top:12px">Tapping Update Now downloads the new version <b>right here inside the app</b>, with progress on screen — you are never sent to a browser or the Downloads folder. The moment the download finishes, the <b>Android installer opens inside the app itself</b> — tap Install once and the new app installs over the old one, no uninstall is needed, and your login, coins and progress stay completely safe.</p>
+        <p class="set-note" style="margin-top:12px">With Auto-Update ON you never have to do any of this yourself: the new version <b>downloads by itself</b> and, the moment the download finishes, <b>Android's installer opens by itself</b>. Android shows its own <b>Install</b> button once — that single tap is Android's security step, and no app is allowed to skip it. The new version installs over the old one: no uninstall, and your login, coins and progress stay completely safe.</p>
       </div>
     </div>
 
@@ -2219,7 +2206,7 @@ body.data-saver .fy-slide img,body.data-saver .bp-player.playing .bp-stage img,b
     <span class="upd-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4v11m0 0l-4.2-4.2M12 15l4.2-4.2M4.5 19.5h15"/></svg></span>
     <h3 id="updModalTitle">Updating StoryPlay</h3>
     <p class="upd-ver" id="updModalVer"></p>
-    <p class="upd-detail" id="updModalDetail">The update downloads right here inside the app — please stay on this screen.</p>
+    <p class="upd-detail" id="updModalDetail">This update is happening by itself — the new version downloads automatically. Please stay on this screen.</p>
     <div class="upd-prog" id="updModalProgWrap"><div class="upd-prog-bar"><i id="updModalProgBar"></i></div><span id="updModalProgTxt">0%</span></div>
     <p class="upd-status" id="updModalStatus"></p>
     <button class="upd-install-btn" id="updModalInstall" type="button">Install Now</button>
@@ -5320,26 +5307,28 @@ spRenderLib();
        release_notes — Live Engine har fetch par spSetUpdateInfo
        bulata hai;
    (2) GitHub Releases (uvraj1/storyplay) ka latest release.
-   Naya version milne par Home par saaf 'Naya Update Available'
-   card aata hai — 'Update Now' dabane par download APP KE ANDAR
-   HI ek in-app update screen par progress (%) ke saath hota hai;
-   user ko browser ya Downloads folder me KABHI nahi bheja jata.
-   Download poora hote hi Android installer app ke andar se hi
-   khulta hai (native bridge mile to usi se, warna in-app rakhe
-   gaye APK blob se isi WebView ke andar) — ek baar Install
-   dabane par nayi app purani ke upar hi install ho jati hai —
+   Update ka koi section Home par NAHI hai — update sirf
+   Settings → App Update me rehta hai. Auto-Update ON (default)
+   hone par SAB KUCH KHUD HOTA HAI: naya version milte hi
+   download khud shuru ho jata hai (progress update screen par
+   dikhta hai), aur download poora hote hi installer khud
+   khulne ke liye APK Android ko saup diya jata hai — user ko
+   'Update Now' ya 'Install Now' dabane ki zaroorat nahi.
+   Sirf Android ka apna system 'Install' button ek baar dabana
+   padta hai — wo Android ki security hai, use koi app skip
+   nahi kar sakta. Nayi app purani ke upar hi install hoti hai —
    uninstall nahi karna padta, login / coins / progress safe
    rehte hain. Download fail ho to Retry bhi app ke andar hi
-   milta hai, browser fallback nahi.
-   'Baad me' dabane par usi version ke liye card 20 ghante tak
-   nahi dikhta — agle din ya agle launch par phir yaad dilata
-   hai; usse naya version aate hi card turant dikhta hai.
+   milta hai.
+   Update screen par 'Later' dabane par usi version ke liye
+   auto-update 20 ghante tak nahi chalta — agle din ya usse
+   naya version aate hi phir khud shuru ho jata hai.
    Settings → App Update me manual 'Check for Updates' aur
    Auto-Update On/Off dono hain. Koi update na mile to kuch
    nahi dikhta — koi nakli version ya nakli progress nahi.
    ============================================================ */
 (function(){
-  var APP_VERSION='1.0.4';
+  var APP_VERSION='1.0.5';
   var GH_LATEST='https://api.github.com/repos/uvraj1/storyplay/releases/latest';
   var DISMISS_KEY='sp_update_dismiss_v1';
   var REMIND_MS=20*60*60*1000;
@@ -5363,7 +5352,7 @@ spRenderLib();
 
   function setStatus(msg){ var s=$('updStatus'); if(s) s.textContent=msg; }
   function setProgress(pct){
-    [['updCardProgWrap','updCardProgBar','updCardProgTxt'],['updProgWrap','updProgBar','updProgTxt'],['updModalProgWrap','updModalProgBar','updModalProgTxt']].forEach(function(t){
+    [['updProgWrap','updProgBar','updProgTxt'],['updModalProgWrap','updModalProgBar','updModalProgTxt']].forEach(function(t){
       var w=$(t[0]); if(!w) return;
       if(pct===null){ w.style.display='none'; return; }
       w.style.display='flex';
@@ -5372,7 +5361,7 @@ spRenderLib();
     });
   }
   function setDlStatus(msg){
-    ['updCardStatus','updSetStatus'].forEach(function(id){ var e=$(id); if(e){ e.textContent=msg||''; e.classList.toggle('show',!!msg); } });
+    ['updSetStatus'].forEach(function(id){ var e=$(id); if(e){ e.textContent=msg||''; e.classList.toggle('show',!!msg); } });
   }
 
   function refreshUI(){
@@ -5387,14 +5376,6 @@ spRenderLib();
         var nl=$('updNotesLine'); if(nl) nl.textContent=info.notes?('What\'s new:\n'+info.notes):'This version includes improvements and new features.';
       }
     }
-    var card=$('updCard');
-    if(card){
-      card.classList.toggle('show',up&&!isDismissed());
-      if(up){
-        var cv=$('updCardVer'); if(cv) cv.textContent='Version '+info.version+' is here — you are currently on v'+APP_VERSION;
-        var cn=$('updCardNotes'); if(cn){ cn.textContent=info.notes?('What\'s new: '+info.notes):''; cn.classList.toggle('show',!!info.notes); }
-      }
-    }
   }
 
   function consider(cand){
@@ -5407,6 +5388,7 @@ spRenderLib();
       if(!info.pageUrl&&cand.pageUrl) info.pageUrl=cand.pageUrl;
     }
     refreshUI();
+    maybeAutoStart();
   }
   window.spSetUpdateInfo=function(cand){ consider(cand); };
 
@@ -5437,8 +5419,9 @@ spRenderLib();
     function finish(){
       if(finished) return; finished=true; checking=false;
       refreshUI();
+      maybeAutoStart();
       if(hasUpdate()){
-        if(manual) setStatus('New update found — v'+info.version+' is available. Tap Update Now below.');
+        if(manual) setStatus(autoOn()?('New update found — v'+info.version+'. It is downloading and installing by itself — nothing to tap.'):('New update found — v'+info.version+' is available. Tap Update Now below.'));
       }else if(manual){
         setStatus('✓ You are on the latest version — StoryPlay v'+APP_VERSION+' is the newest version.');
         toast('✓ StoryPlay is up to date (v'+APP_VERSION+')');
@@ -5449,17 +5432,34 @@ spRenderLib();
   }
   window.spUpdateCheck=checkNow;
 
-  /* ===== IN-APP DOWNLOAD + INSTALLER — sab kuch app ke andar hi =====
-     Download XHR se app ke andar hi hota hai aur APK blob memory me
-     rehta hai — na browser khulta hai, na file Downloads folder me
-     jaati hai. Download poora hote hi installer app ke andar se hi
-     khulta hai:
+  /* ===== SAB KHUD SE — Auto-Update ON ho to naya version milte hi
+     download khud shuru hota hai aur download poora hote hi installer
+     khud khulta hai; user ko 'Update Now' / 'Install Now' dabane ki
+     zaroorat nahi padti. Ek version ke liye ek hi baar auto-start
+     hota hai; user ne update screen band ki ho (dismiss) to us
+     version ke liye dobara khud nahi khulta. ===== */
+  var autoTriedFor='';
+  function maybeAutoStart(){
+    if(!autoOn()||!hasUpdate()||isDismissed()) return;
+    if(typeof downloading!=='undefined'&&downloading) return;
+    if(typeof updReady!=='undefined'&&updReady) return;
+    if(autoTriedFor===info.version) return;
+    autoTriedFor=info.version;
+    setTimeout(function(){
+      if(autoOn()&&hasUpdate()&&!isDismissed()&&!downloading&&!updReady) startDownload();
+    },700);
+  }
+
+  /* ===== DOWNLOAD + INSTALLER HANDOFF =====
+     Download XHR se app ke andar hi hota hai (progress ke saath).
+     Download poora hote hi installer KHUD khulta hai:
        1) Native bridge (Android wrapper) mile to usi ko install ke
           liye APK URL de dete hain — wrapper khud installer kholta hai.
-       2) Warna in-app blob ko ISI WebView ke andar kholte hain —
-          Android wrapper use seedha system installer ko de deta hai.
+       2) Warna asal APK link ko download attribute ke saath Android ke
+          system download ko saup dete hain — DownloadManager se file
+          utarti hai aur Android ka installer khulta hai.
      Fail hone par bhi user app ke andar hi rehta hai — Retry yahin
-     milta hai, browser fallback bilkul nahi hai. */
+     milta hai. */
   var updXhr=null, updBlobUrl='', updReady=false;
 
   function fmtMB(n){ return (n/1048576).toFixed(1)+' MB'; }
@@ -5471,13 +5471,15 @@ spRenderLib();
   function closeUpdModal(){
     if(downloading&&updXhr){ try{ updXhr.abort(); }catch(e){} }
     downloading=false; updXhr=null;
+    /* User ne update screen khud band ki — is version ke liye auto-update
+       20 ghante tak dobara khud nahi khulega (Settings se manual chalega) */
+    if(hasUpdate()) dismissNow();
     var m=$('updModal'); if(m) m.classList.remove('open');
     restoreUpdBtns(); setProgress(null);
     if(typeof spNavRemove==='function') spNavRemove('upd-modal');
   }
   function restoreUpdBtns(){
-    var cb=$('updCardBtn'); if(cb){ cb.disabled=false; cb.textContent=updReady?'Install Now':'Update Now'; }
-    var ib=$('updInstallBtn'); if(ib){ ib.disabled=false; ib.textContent=updReady?'Install Now — Opens Inside App':'Update Now — Install Inside App'; }
+    var ib=$('updInstallBtn'); if(ib){ ib.disabled=false; ib.textContent=updReady?'Install Now':'Update Now'; }
   }
   function setModalState(state,msg){
     var st=$('updModalStatus');
@@ -5487,51 +5489,70 @@ spRenderLib();
     var can=$('updModalCancel'); if(can){ can.textContent=(state==='ready')?'Later':'Cancel'; can.classList.toggle('hide',false); }
     var det=$('updModalDetail');
     if(det){
-      if(state==='ready') det.textContent='Download complete. Tap Install Now — the Android installer opens right here, inside the app.';
+      if(state==='ready') det.textContent='Download complete — the installer is opening by itself. Android will show its own Install button once; tap it to finish.';
       else if(state==='error') det.textContent='You are still inside the app — nothing opened outside. Check your internet and tap Retry.';
-      else det.textContent='The update downloads right here inside the app — please stay on this screen.';
+      else det.textContent='This update is happening by itself — the new version downloads automatically. Please stay on this screen.';
     }
   }
 
   function launchInstaller(){
     if(!updReady) return;
-    setModalState('ready','Opening the installer inside the app…');
-    setDlStatus('Opening the installer inside the app…');
-    /* 1) Native bridge — Android wrapper ke andar installer khulta hai */
+    setModalState('ready','Opening the Android installer…');
+    setDlStatus('Opening the Android installer…');
+    /* 1) Native bridge — Android wrapper khud installer kholta hai */
     try{
       var bridges=[window.StoryPlayNative,window.AndroidBridge,window.AndroidUpdater,window.Android];
       for(var i=0;i<bridges.length;i++){
         var b=bridges[i]; if(!b) continue;
         var fn=b.installApkFromUrl||b.installApk||b.downloadAndInstall||b.openInstaller;
-        if(typeof fn==='function'){ fn.call(b,info.apkUrl); setModalState('ready','✓ Installer opened — tap Install on the Android screen to finish. The new version installs over this app; your login and progress stay safe.'); return; }
+        if(typeof fn==='function'){ fn.call(b,info.apkUrl); setModalState('ready','✓ Installer opened — tap Install on the Android screen to finish. The new version installs over this app; your login and progress stay safe.'); setDlStatus('✓ Installer opened — tap Install on the Android screen to finish.'); return; }
       }
       var cap=window.Capacitor&&window.Capacitor.Plugins;
       if(cap){
         var plug=cap.StoryPlayUpdater||cap.AppUpdate||cap.ApkInstaller;
-        if(plug&&typeof plug.install==='function'){ plug.install({url:info.apkUrl}); setModalState('ready','✓ Installer opened — tap Install on the Android screen to finish. The new version installs over this app; your login and progress stay safe.'); return; }
+        if(plug&&typeof plug.install==='function'){ plug.install({url:info.apkUrl}); setModalState('ready','✓ Installer opened — tap Install on the Android screen to finish. The new version installs over this app; your login and progress stay safe.'); setDlStatus('✓ Installer opened — tap Install on the Android screen to finish.'); return; }
       }
     }catch(e){}
-    /* 2) In-app blob — ISI WebView ke andar kholo (koi download attribute
-          nahi, koi _blank nahi): Android wrapper APK ko pehchan kar
-          system installer isi app ke andar se khol deta hai. */
-    if(updBlobUrl){
+    /* 2) APK ko Android ke SYSTEM DOWNLOAD ko saup do — download attribute
+          ke saath asal APK link click karne se WebView ka DownloadListener /
+          browser use system DownloadManager se download karta hai, aur
+          download poora hote hi Android ka installer khulta hai.
+          PURANI GALTI (yahi 'Install Now kaam nahi kar raha' ki wajah thi):
+          blob: URL wale link ko bina download attribute ke click karna —
+          WebView us par kuch karta hi nahi, installer kabhi khulta hi
+          nahi tha, aur screen jhooth bolti thi ki installer khul gaya. */
+    function handOff(href){
+      var a=document.createElement('a');
+      a.href=href;
+      a.setAttribute('download','StoryPlay-v'+(info.version||APP_VERSION)+'.apk');
+      a.type='application/vnd.android.package-archive';
+      a.rel='noopener';
+      a.style.display='none';
+      document.body.appendChild(a); a.click();
+      setTimeout(function(){ try{ document.body.removeChild(a); }catch(e){} },1500);
+    }
+    if(info.apkUrl){
       try{
-        var a=document.createElement('a');
-        a.href=updBlobUrl;
-        a.type='application/vnd.android.package-archive';
-        document.body.appendChild(a); a.click();
-        setTimeout(function(){ try{ document.body.removeChild(a); }catch(e){} },1500);
-        setModalState('ready','✓ Installer opening inside the app — tap Install to finish. If Android asks to allow installs from StoryPlay, tap Allow and the installer opens right here.');
-        setDlStatus('✓ Download complete — the installer is opening inside the app. Tap Install to finish.');
+        handOff(info.apkUrl);
+        setModalState('ready','Handing the APK to Android — the installer opens from the system download. If it does not open by itself, tap the finished download in the notification shade, then tap Install. Or tap Install Now here to hand it over again.');
+        setDlStatus('✓ Download complete — the installer is opening via the system download. If it does not open, tap the finished download in the notification shade.');
         return;
       }catch(e){}
     }
-    setModalState('ready','Download is ready inside the app. Tap Install Now and the installer will open right here.');
+    if(updBlobUrl){
+      try{
+        handOff(updBlobUrl);
+        setModalState('ready','Handing the APK to Android — if the installer does not open by itself, tap Install Now here to try again.');
+        setDlStatus('✓ Download complete — tap Install Now to hand the APK to the installer.');
+        return;
+      }catch(e){}
+    }
+    setModalState('ready','The update is downloaded. Tap Install Now to open the installer.');
   }
 
   function startDownload(){
     if(downloading) return;
-    if(updReady){ openUpdModal(); setModalState('ready','Download complete — tap Install Now and the installer opens right here, inside the app.'); launchInstaller(); return; }
+    if(updReady){ openUpdModal(); setModalState('ready','Download complete — the installer is opening by itself.'); launchInstaller(); return; }
     if(!hasUpdate()) return;
     if(!info.apkUrl){
       /* Koi bahari page/release link NAHI khulega — user app ke andar hi rehta hai */
@@ -5546,8 +5567,7 @@ spRenderLib();
     setModalState('downloading','Starting download…');
     setDlStatus('Downloading inside the app…');
     setProgress(0);
-    var card=$('updCard'); if(card) card.classList.add('show');
-    var btns=[$('updCardBtn'),$('updInstallBtn')];
+    var btns=[$('updInstallBtn')];
     btns.forEach(function(b){ if(b){ b.disabled=true; b.textContent='Downloading…'; } });
     function fail(msg){
       downloading=false; updXhr=null; restoreUpdBtns(); setProgress(null);
@@ -5573,9 +5593,9 @@ spRenderLib();
         if(updBlobUrl){ try{ URL.revokeObjectURL(updBlobUrl); }catch(e){} }
         updBlobUrl=URL.createObjectURL(xhr.response);
         downloading=false; updXhr=null; updReady=true; restoreUpdBtns();
-        setModalState('ready','✓ Download complete — opening the installer inside the app…');
-        setDlStatus('✓ Download complete — the installer is opening inside the app. Tap Install to finish; no uninstall needed.');
-        toast('✓ Update downloaded — installer opening inside the app');
+        setModalState('ready','✓ Download complete — opening the installer by itself…');
+        setDlStatus('✓ Download complete — the installer is opening by itself. Tap Install on the Android screen to finish; no uninstall needed.');
+        toast('✓ Update downloaded — installer opening');
         setTimeout(launchInstaller,450);
       };
       xhr.onerror=function(){ fail('Network error — the download could not be completed.'); };
@@ -5588,13 +5608,7 @@ spRenderLib();
   var updMI=$('updModalInstall'); if(updMI) updMI.addEventListener('click',launchInstaller);
   var updMR=$('updModalRetry'); if(updMR) updMR.addEventListener('click',function(){ setProgress(0); startDownload(); });
 
-  var cb=$('updCardBtn'); if(cb) cb.addEventListener('click',startDownload);
   var ib=$('updInstallBtn'); if(ib) ib.addEventListener('click',startDownload);
-  var lt=$('updCardLater'); if(lt) lt.addEventListener('click',function(){
-    dismissNow();
-    var card=$('updCard'); if(card) card.classList.remove('show');
-    toast('👍 Okay — we will remind you about this update again tomorrow');
-  });
   var chk=$('updCheckBtn'); if(chk) chk.addEventListener('click',function(){ checkNow(true); });
   document.querySelectorAll('[data-set-screen="update"]').forEach(function(b){
     b.addEventListener('click',function(){ setTimeout(function(){ checkNow(false); },200); });
