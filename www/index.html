@@ -1034,7 +1034,6 @@ body.data-saver .fy-slide img,body.data-saver .bp-player.playing .bp-stage img,b
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5 16.7 16.7"/></svg>
       <input type="search" id="searchInput" placeholder="Haveli Ka Raaz search karo…" aria-label="Search stories">
       <button class="head-gear" id="homeBellBtn" type="button" aria-label="Notifications — bell"><svg viewBox="0 0 24 24"><path d="M6 9.5a6 6 0 0 1 12 0c0 4 1.2 5.4 2 6.5H4c.8-1.1 2-2.5 2-6.5Z"/><path d="M10 19a2.2 2.2 0 0 0 4 0"/></svg></button>
-      <button class="head-gear" id="settingsTopBtn" type="button" aria-label="Settings — gear"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 3.5v2.4M12 18.1v2.4M3.5 12h2.4M18.1 12h2.4M6 6l1.7 1.7M16.3 16.3 18 18M18 6l-1.7 1.7M7.7 16.3 6 18"/></svg></button>
     </div>
   </div>
 </header>
@@ -1180,23 +1179,9 @@ body.data-saver .fy-slide img,body.data-saver .bp-player.playing .bp-stage img,b
         <button class="qa-card" id="qaLanguage" type="button"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5S14.4 18.2 12 20.5c-2.4-2.3-3.6-5.1-3.6-8.5S9.6 5.8 12 3.5Z"/></svg>Language</button>
       </div>
 
-      <section class="panel" id="ownerAccessPanel" style="margin-top:16px">
-        <h2 style="font-family:Manrope;font-size:18px">👑 Owner Access</h2>
-        <p class="lead" style="margin-bottom:8px">Access role se banta hai:<span id="roleBadge" class="role-badge user">● User</span></p>
-        <p style="color:var(--muted);font-size:13px;line-height:1.55;margin:0 0 4px" id="profileEmail">Guest — login nahi kiya</p>
-        <p style="color:var(--muted);font-size:13px;line-height:1.55;margin:0 0 12px" id="roleDescText">Role: user (default) — har account ek normal user hai. Video upload sirf Owner ke liye hai; Creator Mode hata diya gaya hai.</p>
-        <div style="display:flex;flex-direction:column;gap:9px">
-          <button class="big-cta" id="ownerEmailSignInBtn" type="button" style="margin-top:0">👑 Owner ke roop me Sign In (owner@storyplay.app)</button>
-          <button class="ghost-cta" id="playerEmailSignInBtn" type="button" style="margin-top:0">Guest / User ke roop me wapas jao</button>
-        </div>
-        <div id="adminPanelEntry" hidden style="margin-top:12px">
-          <button class="admin-entry-btn" id="openAdminPanelBtn" type="button">🛡️ Admin Panel — Master Dashboard kholo</button>
-        </div>
-        <div id="ownerUploadEntry" hidden style="margin-top:10px">
-          <button class="big-cta" id="uploadOpenBtn" type="button" style="margin-top:0">👑 Owner Upload Studio kholo</button>
-        </div>
-        <div class="owner-lock-note" id="ownerOnlyUploadNotice">🔒 <b>Upload sirf Owner ke liye:</b> Creator Mode hata diya gaya hai — koi bhi normal user video upload nahi kar sakta. Stories sirf Owner apne Upload Studio se publish karta hai.</div>
-      </section>
+      <div class="slist" style="margin-top:10px">
+        <button class="srow" id="profileSettingsRow" type="button"><svg viewBox="0 0 24 24" style="width:22px;height:22px;flex:0 0 auto;fill:none;stroke:var(--gold);stroke-width:1.8;stroke-linecap:round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 3.5v2.4M12 18.1v2.4M3.5 12h2.4M18.1 12h2.4M6 6l1.7 1.7M16.3 16.3 18 18M18 6l-1.7 1.7M7.7 16.3 6 18"/></svg><span>Settings</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+      </div>
 
       <div class="prof-tabs" role="tablist" aria-label="My library">
         <button class="prof-tab active" data-ptab="History" type="button">History</button>
@@ -3522,7 +3507,7 @@ wireSwitch('setSaverToggle','dataSaver');
 wireSwitch('setAgeToggle','ageEveryTime',function(on){ if(on){ ageGateConfirmed=false; } refreshAgeStatus(); });
 
 var setBack=document.getElementById('settingsBackBtn'); if(setBack) setBack.addEventListener('click',function(){ showView('profile'); });
-var setTop=document.getElementById('settingsTopBtn'); if(setTop) setTop.addEventListener('click',openSettings);
+var setRow=document.getElementById('profileSettingsRow'); if(setRow) setRow.addEventListener('click',openSettings);
 var profGear=document.getElementById('profileSettings'); if(profGear){ /* IIFE handler bhi showView('settings') karta hai — yahan sirf status refresh */ profGear.addEventListener('click',function(){ refreshAgeStatus(); updateProfileIdentity(); }); }
 
 document.getElementById('clearHistoryBtn').addEventListener('click',function(){
@@ -3817,7 +3802,7 @@ document.querySelectorAll('[data-set-screen]').forEach(function(b){
   b.addEventListener('click',function(){ openSetScreen(b.getAttribute('data-set-screen')); });
 });
 document.querySelectorAll('.set-sub-back').forEach(function(b){ b.addEventListener('click',closeSetScreen); });
-['settingsTopBtn','profileSettings','qaLanguage'].forEach(function(id){ var b=document.getElementById(id); if(b) b.addEventListener('click',function(){ setTimeout(function(){ closeSetScreen(); },60); }); });
+['profileSettingsRow','profileSettings','qaLanguage'].forEach(function(id){ var b=document.getElementById(id); if(b) b.addEventListener('click',function(){ setTimeout(function(){ closeSetScreen(); },60); }); });
 var setSignInBtnEl=document.getElementById('setSignInBtn'); if(setSignInBtnEl) setSignInBtnEl.addEventListener('click',function(){ showView('auth'); });
 var setPremBtn=document.getElementById('setPremiumBtn');
 if(setPremBtn) setPremBtn.addEventListener('click',function(){
@@ -3862,7 +3847,7 @@ function spRefreshCacheSize(){ var el=document.getElementById('cacheSizeVal'); i
 var _ccArmed=false;
 var _ccBtn=document.getElementById('clearCacheBtn'); if(_ccBtn) _ccBtn.addEventListener('click',function(){ _ccArmed=true; });
 var _cfYes=document.getElementById('confirmYes'); if(_cfYes) _cfYes.addEventListener('click',function(){ if(_ccArmed){ _ccArmed=false; setTimeout(function(){ spCacheBaseline=spCacheBytesNow(); spRefreshCacheSize(); },90); } });
-['settingsTopBtn','profileSettings'].forEach(function(id){ var b=document.getElementById(id); if(b) b.addEventListener('click',function(){ setTimeout(spRefreshCacheSize,60); }); });
+['profileSettingsRow','profileSettings'].forEach(function(id){ var b=document.getElementById(id); if(b) b.addEventListener('click',function(){ setTimeout(spRefreshCacheSize,60); }); });
 spRefreshCacheSize();
 
 /* ============================================================
