@@ -33,14 +33,16 @@ jobs:
           distribution: temurin
       - name: Install Android SDK packages
         run: |
-          echo "y" | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+          echo "y" | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "platform-tools" "platforms;android-35" "build-tools;35.0.0"
       - name: Sync Capacitor web assets to Android
         run: npx cap sync android
+      - name: Decrypt signing keystore
+        run: openssl enc -d -aes-256-cbc -pbkdf2 -in android/app/storyplay-release.keystore.enc -out android/app/storyplay-release.keystore -pass pass:${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
       - name: Build Debug APK
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug --stacktrace
+          ./gradlew assembleDebug -Pandroid.injected.signing.store.file=$PWD/app/storyplay-release.keystore -Pandroid.injected.signing.store.password=${{ secrets.ANDROID_KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.ANDROID_KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.ANDROID_KEY_PASSWORD }}
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
@@ -77,23 +79,18 @@ jobs:
           distribution: temurin
       - name: Install Android SDK packages
         run: |
-          echo "y" | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+          echo "y" | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "platform-tools" "platforms;android-35" "build-tools;35.0.0"
       - name: Sync Capacitor web assets to Android
         run: npx cap sync android
-      - name: Decode signing keystore from Secret
+      - name: Decode release keystore
         run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/storyplay-release.keystore
-          cat > android/keystore.properties <<'EOF'
-          storeFile=storyplay-release.keystore
-          storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}
-          keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}
-          EOF
+          mkdir -p android/app
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/app/storyplay-release.keystore
       - name: Build Release AAB
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew bundleRelease --stacktrace
+          ./gradlew bundleRelease --stacktrace -Pandroid.injected.signing.store.file=$PWD/app/storyplay-release.keystore -Pandroid.injected.signing.store.password=${{ secrets.ANDROID_KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.ANDROID_KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.ANDROID_KEY_PASSWORD }}
       - name: Upload Release AAB
         uses: actions/upload-artifact@v4
         with:
