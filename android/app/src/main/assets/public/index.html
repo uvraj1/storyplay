@@ -687,6 +687,29 @@ pre.branch-json{max-height:340px;overflow:auto}
 .app-banner.green{background:linear-gradient(135deg,#0f2e1a,#1A1A1C);border:1px solid #1d7a44;color:#8ff0b3}
 .app-banner span{flex:1;min-width:0}
 .app-banner button{flex:0 0 auto;border:1px solid currentColor;background:transparent;color:inherit;border-radius:99px;padding:6px 11px;font-size:12px;font-weight:800;min-height:34px}
+/* ===== AUTO-UPDATE — Home card + download progress ===== */
+.upd-card{display:none;border:1px solid #6b5518;background:linear-gradient(135deg,#2a2108,#141416 65%);border-radius:16px;padding:15px 14px;margin-bottom:14px}
+.upd-card.show{display:block}
+.upd-head{display:flex;align-items:center;gap:11px}
+.upd-ico{flex:0 0 auto;width:40px;height:40px;border-radius:12px;background:var(--gold);display:grid;place-items:center}
+.upd-ico svg{width:21px;height:21px;fill:none;stroke:#1A1200;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.upd-titles{flex:1;min-width:0}
+.upd-titles b{display:block;font-size:16px;color:#FFD34D;line-height:1.25}
+.upd-titles span{display:block;color:#d8d8dc;font-size:12.5px;margin-top:2px;line-height:1.4}
+.upd-notes{display:none;color:#c9cad2;font-size:13px;line-height:1.55;margin:10px 0 0;white-space:pre-line}
+.upd-notes.show{display:block}
+.upd-prog{display:flex;align-items:center;gap:10px;margin-top:12px}
+.upd-prog-bar{flex:1;height:9px;border-radius:99px;background:#2A2A31;overflow:hidden}
+.upd-prog-bar i{display:block;height:100%;width:0%;background:var(--gold);border-radius:99px;transition:width .25s ease}
+.upd-prog span{flex:0 0 auto;color:#FFD34D;font-size:12.5px;font-weight:800;min-width:38px;text-align:right}
+.upd-status{display:none;color:#8ff0b3;font-size:12.5px;font-weight:700;line-height:1.5;margin:10px 0 0}
+.upd-status.show{display:block}
+.upd-actions{display:flex;gap:9px;margin-top:13px}
+.upd-btn{flex:1;border:none;background:var(--gold);color:#1A1200;font-weight:800;font-size:14.5px;border-radius:12px;padding:13px 10px;min-height:48px}
+.upd-btn:active{background:#d97706}
+.upd-btn.ghost{flex:0 0 auto;background:transparent;border:1px solid rgba(255,255,255,.22);color:#d8d8dc;padding:13px 16px}
+.upd-btn[disabled]{opacity:.55}
+.upd-new-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#FF2E4C;margin-left:7px;vertical-align:middle}
 .admin-tabs{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;margin:14px 0 4px}
 .admin-tabs::-webkit-scrollbar{display:none}
 .admin-tab{flex:0 0 auto;border:1px solid var(--line);background:var(--bg2);color:var(--muted);border-radius:999px;padding:10px 15px;font-weight:800;font-size:13px;white-space:nowrap}
@@ -1148,6 +1171,21 @@ body.data-saver .fy-slide img,body.data-saver .bp-player.playing .bp-stage img,b
     <div class="app-banner gold" id="appWideBanner" role="status"><span id="appWideBannerText"></span><button type="button" id="appWideBannerDismiss">Got it</button></div>
 
     <div class="home-scroll">
+    <!-- AUTO-UPDATE CARD — sirf tab dikhta hai jab asal naya version mila ho aur user ne
+         us version ke liye 'Baad me' na kaha ho; baaki samay poori tarah chhupa rehta hai -->
+    <div class="upd-card" id="updCard" role="status">
+      <div class="upd-head">
+        <span class="upd-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4v11m0 0l-4.2-4.2M12 15l4.2-4.2M4.5 19.5h15"/></svg></span>
+        <div class="upd-titles"><b>Naya Update Available</b><span id="updCardVer">Naya version aa gaya hai</span></div>
+      </div>
+      <p class="upd-notes" id="updCardNotes"></p>
+      <div class="upd-prog" id="updCardProgWrap" style="display:none"><div class="upd-prog-bar"><i id="updCardProgBar"></i></div><span id="updCardProgTxt">0%</span></div>
+      <p class="upd-status" id="updCardStatus"></p>
+      <div class="upd-actions">
+        <button class="upd-btn" id="updCardBtn" type="button">Update Karo</button>
+        <button class="upd-btn ghost" id="updCardLater" type="button">Baad me</button>
+      </div>
+    </div>
     <!-- ALL STORIES — ek hi shared story source (Backend catalog) se render hoti hai -->
     <div class="section-head" style="margin-top:2px">
       <div><h2>All Stories</h2></div>
@@ -1414,8 +1452,9 @@ body.data-saver .fy-slide img,body.data-saver .bp-player.playing .bp-stage img,b
       <div class="slist">
         <button class="srow" data-set-screen="privacy" type="button"><span>Privacy Policy</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
         <button class="srow" data-set-screen="terms" type="button"><span>Terms of Use</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+        <button class="srow" data-set-screen="update" type="button"><span>Check for Updates</span><span class="sval" id="updRowVal">v1.0.1</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
       </div>
-      <p class="version-line">Version 1.0.0</p>
+      <p class="version-line">Version 1.0.1</p>
 
       <button class="signout-btn" id="logoutBtn" type="button">Sign out</button>
     </div>
@@ -1693,6 +1732,28 @@ body.data-saver .fy-slide img,body.data-saver .bp-player.playing .bp-stage img,b
         <p>Premium plans ke fayde — ad-free viewing, unlimited viewing aur download access — plan active rehne tak milte hain.</p>
         <h4>Account</h4>
         <p>Tum apne account ki jaankari sahi rakhne ke zimmedaar ho. Account delete karne par is device ka data hamesha ke liye hat jata hai.</p>
+      </div>
+    </div>
+
+    <!-- ===== SCREEN: App Update ===== -->
+    <div class="set-sub" id="setSub-update" aria-label="App Update">
+      <div class="set-head">
+        <button class="set-back set-sub-back" type="button" aria-label="Back to Settings"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <h2>App Update</h2>
+        <span class="set-head-spacer" aria-hidden="true"></span>
+      </div>
+      <div class="set-sub-body">
+        <div class="set-row"><div class="set-main"><b>Current Version</b><span>Tumhare phone par abhi ye version chal raha hai</span></div><span class="sval" style="margin-left:auto">v1.0.1</span></div>
+        <div class="set-row"><div class="set-main"><b>Auto-Update</b><span>ON = app khulte hi aur internet milte hi naya version khud check hoga, aur milne par Home par update card dikhega. OFF = update sirf yahan manually check hoga</span></div><button class="switch on" id="setAutoUpdateToggle" type="button" role="switch" aria-checked="true" aria-label="Auto update on off"></button></div>
+        <p class="set-note" id="updStatus" style="margin-top:12px">App har launch par khud update check karta hai. Kabhi bhi khud check karna ho to neeche wala button dabao.</p>
+        <div id="updAvailBox" style="display:none">
+          <div class="set-row"><div class="set-main"><b id="updLatestLine">Naya version available hai</b><span id="updNotesLine" style="white-space:pre-line"></span></div></div>
+          <div class="upd-prog" id="updProgWrap" style="display:none"><div class="upd-prog-bar"><i id="updProgBar"></i></div><span id="updProgTxt">0%</span></div>
+          <p class="upd-status" id="updSetStatus"></p>
+          <button class="set-action" id="updInstallBtn" type="button" style="background:var(--gold);border-color:var(--gold);color:#1A1200;text-align:center">Update Karo — APK Download Karo</button>
+        </div>
+        <button class="set-action" id="updCheckBtn" type="button">Check for Updates</button>
+        <p class="set-note" style="margin-top:12px">Update Karo dabane par nayi APK download hogi aur progress dikhega. Download poora hone par file par ek baar <b>Install</b> dabana hoga — nayi app purani ke upar hi install ho jayegi, uninstall karne ki zaroorat nahi padegi, aur tumhara login, coins aur progress bilkul safe rahenge.</p>
       </div>
     </div>
 
@@ -3900,7 +3961,7 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&bpPlayer.c
    SETTINGS — har setting kaam karti hai, turant apply hoti hai
    aur is session me save rehti hai. Koi dead button nahi hai.
    ============================================================ */
-var userSettings={ language:'hi', subtitles:true, subLang:'hi', quality:'Auto', autoplay:true, notifications:true, wifiOnly:true, dlQuality:'720p', dataSaver:false, matureContent:true };
+var userSettings={ language:'hi', subtitles:true, subLang:'hi', quality:'Auto', autoplay:true, notifications:true, wifiOnly:true, dlQuality:'720p', dataSaver:false, matureContent:true, autoUpdate:true };
 var SETTINGS_DEFAULTS=JSON.parse(JSON.stringify(userSettings));
 function bpRefreshSubtitle(){
   // Scene description player me SIRF EK BAAR dikhta hai (bpSceneDesc) — subtitle box
@@ -4005,7 +4066,7 @@ document.getElementById('deleteAccountBtn').addEventListener('click',function(){
     if(typeof bpUpdateEndingsBadge==='function') bpUpdateEndingsBadge();
     // UI ko defaults par wapas lao
     document.querySelectorAll('.switch').forEach(function(sw){ var on=false;
-      if(sw.id==='setSubToggle'||sw.id==='setAutoplayToggle'||sw.id==='setNotifToggle'||sw.id==='setWifiToggle'||sw.id==='setMatureToggle') on=true;
+      if(sw.id==='setSubToggle'||sw.id==='setAutoplayToggle'||sw.id==='setNotifToggle'||sw.id==='setWifiToggle'||sw.id==='setMatureToggle'||sw.id==='setAutoUpdateToggle') on=true;
       sw.classList.toggle('on',on); sw.setAttribute('aria-checked',on?'true':'false'); });
     document.querySelectorAll('[data-set-lang]').forEach(function(b){ b.classList.toggle('active',b.getAttribute('data-set-lang')==='hi'); });
     document.querySelectorAll('[data-set-sublang]').forEach(function(b){ b.classList.toggle('active',b.getAttribute('data-set-sublang')==='hi'); });
@@ -4263,6 +4324,7 @@ wireSeg('set-vspeed','voiceSpeed');
 wireSwitch('setNotifNew','notifNew');
 wireSwitch('setNotifEnd','notifEndings');
 wireSwitch('setNotifOffer','notifOffers');
+wireSwitch('setAutoUpdateToggle','autoUpdate',function(on){ if(on&&typeof window.spUpdateCheck==='function') window.spUpdateCheck(false); });
 function refreshSetRowValues(){
   if(typeof userSettings==='undefined') return;
   var S=userSettings;
@@ -4511,6 +4573,12 @@ spVoiceUI();
     var ar=num(map.ad_reward); if(ar!==null){ appSettings.adReward=ar; changed=true; }
     if(map.app_banner&&typeof map.app_banner==='object'){ appSettings.bannerStatus=map.app_banner.enabled?'on':'off'; appSettings.bannerText=String(map.app_banner.text||''); if(map.app_banner.style) appSettings.bannerStyle=String(map.app_banner.style); changed=true; }
     if(changed&&typeof applyAppSettings==='function') applyAppSettings('live');
+    /* Auto-update jaankari — Backend ke app_settings se latest_version / apk_url /
+       release_notes aate hi update engine ko de do (alag keys ya ek app_update JSON) */
+    var uv=map.latest_version||map.app_latest_version, ua=map.apk_url||map.app_apk_url, un=map.release_notes||map.app_release_notes;
+    var au=map.app_update; if(typeof au==='string'){ try{ au=JSON.parse(au); }catch(e){ au=null; } }
+    if(au&&typeof au==='object'){ uv=uv||au.latest_version||au.version; ua=ua||au.apk_url||au.url; un=un||au.release_notes||au.notes; }
+    if(uv&&typeof window.spSetUpdateInfo==='function') window.spSetUpdateInfo({version:String(uv), apkUrl:ua?String(ua):'', notes:un?String(un):'', pageUrl:'', source:'app-settings'});
     if(Object.prototype.toString.call(map.vip_plans)==='[object Array]'&&map.vip_plans.length){
       var txt=map.vip_plans.map(function(p){ return (p.plan||'Plan')+' ₹'+(p.price!=null?p.price:''); }).join(' • ');
       var pp=document.getElementById('setPremiumPrices'); if(pp) pp.textContent=txt;
@@ -5075,6 +5143,208 @@ var bpMenuBtnEl=document.getElementById('bpMenuBtn'); if(bpMenuBtnEl) bpMenuBtnE
 /* Shuru me saare counts asal 0 state se sync */
 spEngageSync('haveli-raaz');
 spRenderLib();
+</script>
+<script>
+/* ============================================================
+   AUTO-UPDATE SYSTEM — app khulte hi (aur internet wapas milte
+   hi) naya version khud check hota hai, do asal sources se:
+   (1) Backend ke app_settings se latest_version + apk_url +
+       release_notes — Live Engine har fetch par spSetUpdateInfo
+       bulata hai;
+   (2) GitHub Releases (uvraj1/storyplay) ka latest release.
+   Naya version milne par Home par saaf 'Naya Update Available'
+   card aata hai — 'Update Karo' dabane par APK progress (%)
+   ke saath download hoti hai; download ke baad file par ek
+   baar Install dabana hota hai aur nayi app purani ke upar hi
+   install ho jati hai — uninstall nahi karna padta, login /
+   coins / progress safe rehte hain.
+   'Baad me' dabane par usi version ke liye card 20 ghante tak
+   nahi dikhta — agle din ya agle launch par phir yaad dilata
+   hai; usse naya version aate hi card turant dikhta hai.
+   Settings → App Update me manual 'Check for Updates' aur
+   Auto-Update On/Off dono hain. Koi update na mile to kuch
+   nahi dikhta — koi nakli version ya nakli progress nahi.
+   ============================================================ */
+(function(){
+  var APP_VERSION='1.0.1';
+  var GH_LATEST='https://api.github.com/repos/uvraj1/storyplay/releases/latest';
+  var DISMISS_KEY='sp_update_dismiss_v1';
+  var REMIND_MS=20*60*60*1000;
+  var info={version:'',apkUrl:'',notes:'',pageUrl:'',source:''};
+  var checking=false, downloading=false, lastAutoCheck=0;
+
+  function $(id){ return document.getElementById(id); }
+  function toast(m){ if(typeof showToast==='function') showToast(m); }
+  function autoOn(){ return typeof userSettings==='undefined'||userSettings.autoUpdate!==false; }
+  function verParts(v){ return String(v||'').replace(/^[^0-9]*/,'').split('.').map(function(x){ var n=parseInt(x,10); return isNaN(n)?0:n; }); }
+  function verCmp(a,b){ var pa=verParts(a), pb=verParts(b), n=Math.max(pa.length,pb.length); for(var i=0;i<n;i++){ var d=(pa[i]||0)-(pb[i]||0); if(d) return d; } return 0; }
+  function hasUpdate(){ return !!info.version && verCmp(info.version,APP_VERSION)>0; }
+
+  function dismissLoad(){ try{ var r=localStorage.getItem(DISMISS_KEY); return r?JSON.parse(r):null; }catch(e){ return null; } }
+  function isDismissed(){
+    if(!hasUpdate()) return false;
+    var d=dismissLoad(); if(!d||d.v!==info.version) return false;
+    return (Date.now()-(d.ts||0))<REMIND_MS;
+  }
+  function dismissNow(){ try{ localStorage.setItem(DISMISS_KEY,JSON.stringify({v:info.version,ts:Date.now()})); }catch(e){} }
+
+  function setStatus(msg){ var s=$('updStatus'); if(s) s.textContent=msg; }
+  function setProgress(pct){
+    [['updCardProgWrap','updCardProgBar','updCardProgTxt'],['updProgWrap','updProgBar','updProgTxt']].forEach(function(t){
+      var w=$(t[0]); if(!w) return;
+      if(pct===null){ w.style.display='none'; return; }
+      w.style.display='flex';
+      var b=$(t[1]); if(b) b.style.width=pct+'%';
+      var x=$(t[2]); if(x) x.textContent=pct+'%';
+    });
+  }
+  function setDlStatus(msg){
+    ['updCardStatus','updSetStatus'].forEach(function(id){ var e=$(id); if(e){ e.textContent=msg||''; e.classList.toggle('show',!!msg); } });
+  }
+
+  function refreshUI(){
+    var up=hasUpdate();
+    var rv=$('updRowVal');
+    if(rv){ rv.innerHTML=up?('v'+APP_VERSION+' <span style="color:#FFD34D;font-weight:800">• Naya v'+info.version+'</span><span class="upd-new-dot"></span>'):('v'+APP_VERSION); }
+    var box=$('updAvailBox');
+    if(box){
+      box.style.display=up?'':'none';
+      if(up){
+        var ll=$('updLatestLine'); if(ll) ll.textContent='Naya version v'+info.version+' available hai';
+        var nl=$('updNotesLine'); if(nl) nl.textContent=info.notes?('Kya naya hai:\n'+info.notes):'Is version me sudhaar aur naye features hain.';
+      }
+    }
+    var card=$('updCard');
+    if(card){
+      card.classList.toggle('show',up&&!isDismissed());
+      if(up){
+        var cv=$('updCardVer'); if(cv) cv.textContent='Version '+info.version+' aa gaya hai — tum abhi v'+APP_VERSION+' par ho';
+        var cn=$('updCardNotes'); if(cn){ cn.textContent=info.notes?('Kya naya hai: '+info.notes):''; cn.classList.toggle('show',!!info.notes); }
+      }
+    }
+  }
+
+  function consider(cand){
+    if(!cand||!cand.version) return;
+    if(!info.version||verCmp(cand.version,info.version)>0){
+      info={version:String(cand.version),apkUrl:cand.apkUrl||'',notes:cand.notes||'',pageUrl:cand.pageUrl||'',source:cand.source||''};
+    }else if(verCmp(cand.version,info.version)===0){
+      if(!info.apkUrl&&cand.apkUrl) info.apkUrl=cand.apkUrl;
+      if(!info.notes&&cand.notes) info.notes=cand.notes;
+      if(!info.pageUrl&&cand.pageUrl) info.pageUrl=cand.pageUrl;
+    }
+    refreshUI();
+  }
+  window.spSetUpdateInfo=function(cand){ consider(cand); };
+
+  function checkGitHub(done){
+    if(!window.fetch){ done(false); return; }
+    fetch(GH_LATEST,{headers:{'Accept':'application/vnd.github+json'}}).then(function(r){
+      return r.ok?r.json():null;
+    }).then(function(rel){
+      if(!rel){ done(false); return; }
+      var v=String(rel.tag_name||'').replace(/^v/i,'').trim();
+      if(!v){ done(false); return; }
+      var apk='';
+      if(rel.assets&&rel.assets.length){ for(var i=0;i<rel.assets.length;i++){ var a=rel.assets[i]; if(a&&/\.apk$/i.test(a.name||'')){ apk=a.browser_download_url||''; break; } } }
+      consider({version:v,apkUrl:apk,notes:String(rel.body||'').trim().slice(0,900),pageUrl:rel.html_url||'',source:'github'});
+      done(true);
+    }).catch(function(){ done(false); });
+  }
+
+  function checkNow(manual){
+    if(checking) return;
+    if(!navigator.onLine){
+      if(manual){ setStatus('Abhi internet nahi hai — connection aate hi update khud check ho jayega.'); toast('📶 Internet nahi hai — update check nahi ho paya'); }
+      return;
+    }
+    checking=true;
+    if(manual) setStatus('Update check ho raha hai…');
+    var finished=false;
+    function finish(){
+      if(finished) return; finished=true; checking=false;
+      refreshUI();
+      if(hasUpdate()){
+        if(manual) setStatus('Naya update mil gaya — v'+info.version+' available hai. Neeche Update Karo dabao.');
+      }else if(manual){
+        setStatus('✓ Tum latest version par ho — StoryPlay v'+APP_VERSION+' hi sabse naya version hai.');
+        toast('✓ StoryPlay up to date hai (v'+APP_VERSION+')');
+      }
+    }
+    checkGitHub(function(){ setTimeout(finish,400); });
+    setTimeout(finish,6000);
+  }
+  window.spUpdateCheck=checkNow;
+
+  function startDownload(){
+    if(!hasUpdate()||downloading) return;
+    if(!info.apkUrl){
+      if(info.pageUrl){ window.open(info.pageUrl,'_blank'); toast('Release page khul gaya hai — wahan se APK download karo'); }
+      else{ setDlStatus('Is update ka APK link abhi available nahi hai — thodi der baad phir check karo.'); toast('⚠️ Is update ka APK link abhi available nahi hai'); }
+      return;
+    }
+    downloading=true;
+    setDlStatus('Download shuru ho raha hai…');
+    setProgress(0);
+    var card=$('updCard'); if(card) card.classList.add('show');
+    var btns=[$('updCardBtn'),$('updInstallBtn')];
+    function btnState(disabled,label){
+      btns.forEach(function(b){ if(b){ b.disabled=disabled; if(label) b.textContent=label; } });
+    }
+    btnState(true,'Download ho raha hai…');
+    function restoreBtns(){
+      var cb=$('updCardBtn'); if(cb){ cb.disabled=false; cb.textContent='Update Karo'; }
+      var ib=$('updInstallBtn'); if(ib){ ib.disabled=false; ib.textContent='Update Karo — APK Download Karo'; }
+    }
+    function fail(msg){
+      downloading=false; restoreBtns(); setProgress(null);
+      setDlStatus(msg+' Browser se seedha download shuru kar rahe hain…');
+      try{ window.open(info.apkUrl,'_blank'); }catch(e){}
+    }
+    try{
+      var xhr=new XMLHttpRequest();
+      xhr.open('GET',info.apkUrl,true);
+      xhr.responseType='blob';
+      xhr.onprogress=function(ev){ if(ev.lengthComputable&&ev.total>0) setProgress(Math.min(99,Math.round(ev.loaded/ev.total*100))); };
+      xhr.onload=function(){
+        if(xhr.status<200||xhr.status>=300){ fail('Download beech me ruk gaya (HTTP '+xhr.status+').'); return; }
+        setProgress(100);
+        var url=URL.createObjectURL(xhr.response);
+        var a=document.createElement('a');
+        a.href=url; a.download='StoryPlay-v'+info.version+'.apk';
+        document.body.appendChild(a); a.click();
+        setTimeout(function(){ try{ document.body.removeChild(a); URL.revokeObjectURL(url); }catch(e){} },4000);
+        downloading=false; restoreBtns();
+        setDlStatus('✓ Download poora ho gaya — Downloads me StoryPlay-v'+info.version+'.apk milegi, use kholo aur Install dabao. Purani app ke upar hi update hoga, uninstall nahi karna padega.');
+        toast('✓ APK download ho gaya — file kholkar Install dabao');
+      };
+      xhr.onerror=function(){ fail('Network error — download nahi ho paya.'); };
+      xhr.send();
+    }catch(e){ fail('Download shuru nahi ho paya.'); }
+  }
+
+  var cb=$('updCardBtn'); if(cb) cb.addEventListener('click',startDownload);
+  var ib=$('updInstallBtn'); if(ib) ib.addEventListener('click',startDownload);
+  var lt=$('updCardLater'); if(lt) lt.addEventListener('click',function(){
+    dismissNow();
+    var card=$('updCard'); if(card) card.classList.remove('show');
+    toast('👍 Thik hai — is update ke liye kal phir yaad dilayenge');
+  });
+  var chk=$('updCheckBtn'); if(chk) chk.addEventListener('click',function(){ checkNow(true); });
+  document.querySelectorAll('[data-set-screen="update"]').forEach(function(b){
+    b.addEventListener('click',function(){ setTimeout(function(){ checkNow(false); },200); });
+  });
+
+  function autoCheck(){
+    if(!autoOn()) return;
+    var now=Date.now(); if(now-lastAutoCheck<5*60*1000) return; lastAutoCheck=now;
+    checkNow(false);
+  }
+  setTimeout(autoCheck,2500);
+  window.addEventListener('online',function(){ setTimeout(autoCheck,800); });
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden) autoCheck(); });
+  refreshUI();
+})();
 </script>
 </body>
 </html>
