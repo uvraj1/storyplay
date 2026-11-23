@@ -184,6 +184,23 @@ img{max-width:100%}
 .vip-banner{border:1px dashed var(--line);border-radius:18px;padding:18px;margin-top:14px;text-align:center;color:var(--muted)}
 .vip-banner h3{margin:0 0 5px;font-family:Cinzel,serif;font-size:19px;color:var(--text)}
 .vip-banner p{margin:0;font-size:13.5px;line-height:1.5}
+/* REWARDS — daily check-in states + claim + premium coming soon */
+.day-box .day-state{display:block;font-size:10px;font-weight:700;letter-spacing:.02em;margin-top:2px;color:var(--faint)}
+.day-box.done{border:1px solid #1d7a44;background:rgba(0,200,83,.08);color:#8ff0b3}
+.day-box.done b{color:#8ff0b3}
+.day-box.done .day-state{color:#8ff0b3}
+.day-box.today{border:1px solid var(--gold);background:rgba(245,158,11,.10);color:#FFD34D;box-shadow:0 0 14px rgba(245,158,11,.22)}
+.day-box.today b{color:#FFD34D}
+.day-box.today .day-state{color:#FFD34D}
+.checkin-claim{width:100%;margin-top:14px;border:none;background:linear-gradient(135deg,#F59E0B,#FBBF24);color:#1a1200;font-weight:800;border-radius:14px;padding:14px;font-size:15px;box-shadow:0 10px 24px rgba(245,158,11,.28)}
+.checkin-claim:disabled{background:#3A3A3E;color:#8E8E93;cursor:not-allowed;box-shadow:none}
+.soon-chip{display:inline-block;background:rgba(245,158,11,.14);border:1px solid rgba(251,191,36,.5);color:#FFD34D;font-size:10.5px;font-weight:800;letter-spacing:.06em;border-radius:99px;padding:4px 10px;vertical-align:2px;margin-left:8px}
+.vip-plan-price button.soon-btn{background:var(--card2);color:var(--faint);border:1px solid var(--line);cursor:not-allowed;box-shadow:none}
+.earn-list{margin:0;padding:0;list-style:none}
+.earn-list li{display:flex;gap:11px;align-items:flex-start;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.07);color:var(--muted);font-size:13.5px;line-height:1.55}
+.earn-list li:last-child{border-bottom:none;padding-bottom:2px}
+.earn-list li b{color:var(--text)}
+.earn-list .earn-ic{flex:0 0 auto;width:34px;height:34px;border-radius:10px;background:rgba(245,158,11,.12);border:1px solid rgba(251,191,36,.3);display:grid;place-items:center;font-size:16px}
 
 /* PROFILE SHELL */
 .profile-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
@@ -1286,32 +1303,42 @@ body.data-saver .fy-slide img,body.data-saver .bp-player.playing .bp-stage img,b
         <div><b class="coin-balance-val">0</b><span>Coins</span></div>
         <div><b id="unlockedCountVal">0</b><span>Episodes Unlocked</span></div>
       </div>
-      <p style="color:var(--muted);font-size:13.5px;line-height:1.6;margin:0">Your balance is currently <b style="color:#fff">0 coins</b> — coins are earned only through real activity (daily check-in, rewarded ads in the live app). There is no simulated ad, fake earning or made-up balance in this preview. The first <b style="color:#fff">5 episodes are free</b>; unlocking EP 6+ costs <b style="color:#FFD34D">🪙 5 coins</b>.</p>
+      <p style="color:var(--muted);font-size:13.5px;line-height:1.6;margin:0">Your balance is <b style="color:#fff"><span class="coin-balance-val">0</span> coins</b>. Earn coins from the <b style="color:#fff">Daily Check-in</b> below — claim every day and the reward grows with your streak. The first <b style="color:#fff">5 episodes of every story are free</b>; unlocking EP 6+ costs <b style="color:#FFD34D">🪙 5 coins</b> each.</p>
     </div>
 
     <section class="panel">
       <h2>Daily Check-in</h2>
-      <p class="lead">Coins are earned only when you actually log in and check in every day. You have no check-in record yet:</p>
+      <p class="lead">Claim your reward once a day — the coins are added straight to your wallet balance above. Current streak: <b style="color:#FFD34D"><span id="checkinStreak">0</span> day(s)</b>. Miss a day and the streak starts again from Day 1.</p>
       <div class="checkin-grid" id="checkinGrid">
-        <div class="day-box">Day 1<b>—</b></div>
-        <div class="day-box">Day 2<b>—</b></div>
-        <div class="day-box">Day 3<b>—</b></div>
-        <div class="day-box">Day 4<b>—</b></div>
-        <div class="day-box">Day 5<b>—</b></div>
-        <div class="day-box">Day 6<b>—</b></div>
-        <div class="day-box">Day 7<b>—</b></div>
+        <div class="day-box">Day 1<b>+10 🪙</b><span class="day-state">Locked</span></div>
+        <div class="day-box">Day 2<b>+10 🪙</b><span class="day-state">Locked</span></div>
+        <div class="day-box">Day 3<b>+15 🪙</b><span class="day-state">Locked</span></div>
+        <div class="day-box">Day 4<b>+20 🪙</b><span class="day-state">Locked</span></div>
+        <div class="day-box">Day 5<b>+20 🪙</b><span class="day-state">Locked</span></div>
+        <div class="day-box">Day 6<b>+25 🪙</b><span class="day-state">Locked</span></div>
+        <div class="day-box">Day 7<b>+50 🪙</b><span class="day-state">Locked</span></div>
       </div>
-      <p class="prof-note" style="margin-top:12px">A check-in counts only when you log in and really open the app every day — no coins are added without activity.</p>
+      <button class="checkin-claim" id="claimCheckinBtn" type="button">🪙 Claim Day 1 — +10 Coins</button>
+      <p class="prof-note" style="margin-top:12px">One claim per day. Claimed coins stay in your balance and can be spent on episode unlocks (EP 6+ · 5 coins each).</p>
     </section>
 
     <section class="panel" id="vipPlans">
-      <h2>👑 Premium</h2>
-      <p class="lead" id="vipStatusText">No Premium plan is active right now, and no payment happens in this preview — no fake VIP or perk will be shown. In the live app, plans connect through Google Play Billing: Weekly ₹49 • Monthly ₹149 • Yearly ₹999.</p>
+      <h2>👑 Premium<span class="soon-chip">COMING SOON</span></h2>
+      <p class="lead" id="vipStatusText">No Premium plan is active right now. Premium activation will start from the backend soon — till then the plans below are shown for information only and no payment is taken.</p>
+      <div class="vip-plans">
+        <div class="vip-plan" data-vip-soon><div class="vip-plan-main"><b>Weekly</b><span>7 days • Ad-Free viewing • Unlimited viewing • All episodes open — no coins needed</span></div><div class="vip-plan-price"><b>₹49</b><button class="soon-btn" type="button" disabled>Coming Soon</button></div></div>
+        <div class="vip-plan best" data-vip-soon><div class="vip-plan-main"><b>Monthly</b><span>30 days • Ad-Free viewing • Unlimited viewing • Download access • All episodes open — no coins needed</span></div><div class="vip-plan-price"><b>₹149</b><button class="soon-btn" type="button" disabled>Coming Soon</button></div></div>
+        <div class="vip-plan" data-vip-soon><div class="vip-plan-main"><b>Yearly</b><span>12 months • All Monthly benefits • Lowest monthly cost • All episodes open — no coins needed</span></div><div class="vip-plan-price"><b>₹999</b><button class="soon-btn" type="button" disabled>Coming Soon</button></div></div>
+      </div>
     </section>
 
     <section class="panel">
       <h2>How Do You Earn Coins?</h2>
-      <p class="lead">Coins are earned only through real activity — daily check-in and rewarded ads in the live app. There is no simulated ad or fake earning in this preview, so the balance is 0 right now.</p>
+      <ul class="earn-list">
+        <li><span class="earn-ic">📅</span><div><b>Daily Check-in</b> — claim once a day: Day 1–2 give +10 🪙, Day 3 +15, Day 4–5 +20, Day 6 +25 and Day 7 +50. Keep the streak going to earn up to <b>150 coins a week</b>.</div></li>
+        <li><span class="earn-ic">🔓</span><div><b>Spend on unlocks</b> — the first 5 episodes of every story are free. From EP 6 onwards, unlock an episode forever for <b>🪙 5 coins</b>.</div></li>
+        <li><span class="earn-ic">👑</span><div><b>Premium (coming soon)</b> — when Premium activates from the backend, every episode opens without coins and ads are removed.</div></li>
+      </ul>
     </section>
   </section>
 
@@ -1484,9 +1511,9 @@ body.data-saver .fy-slide img,body.data-saver .bp-player.playing .bp-stage img,b
       <div class="slist">
         <button class="srow" data-set-screen="privacy" type="button"><span>Privacy Policy</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
         <button class="srow" data-set-screen="terms" type="button"><span>Terms of Use</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
-        <button class="srow" data-set-screen="update" type="button"><span>Check for Updates</span><span class="sval" id="updRowVal">v1.0.3</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+        <button class="srow" data-set-screen="update" type="button"><span>Check for Updates</span><span class="sval" id="updRowVal">v1.0.4</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
       </div>
-      <p class="version-line">Version 1.0.3</p>
+      <p class="version-line">Version 1.0.4</p>
 
       <button class="signout-btn" id="logoutBtn" type="button">Sign out</button>
     </div>
@@ -1775,7 +1802,7 @@ body.data-saver .fy-slide img,body.data-saver .bp-player.playing .bp-stage img,b
         <span class="set-head-spacer" aria-hidden="true"></span>
       </div>
       <div class="set-sub-body">
-        <div class="set-row"><div class="set-main"><b>Current Version</b><span>This is the version currently running on your phone</span></div><span class="sval" style="margin-left:auto">v1.0.3</span></div>
+        <div class="set-row"><div class="set-main"><b>Current Version</b><span>This is the version currently running on your phone</span></div><span class="sval" style="margin-left:auto">v1.0.4</span></div>
         <div class="set-row"><div class="set-main"><b>Auto-Update</b><span>ON = the app checks for a new version on launch and whenever the internet is available, and shows an update card on Home when one is found. OFF = updates are checked only manually here</span></div><button class="switch on" id="setAutoUpdateToggle" type="button" role="switch" aria-checked="true" aria-label="Auto update on off"></button></div>
         <p class="set-note" id="updStatus" style="margin-top:12px">The app checks for updates by itself on every launch. To check manually at any time, tap the button below.</p>
         <div id="updAvailBox" style="display:none">
@@ -2653,7 +2680,7 @@ function renderAdminUsers(){
       coinBtn.textContent='🪙 +100 Coins Do';
       coinBtn.addEventListener('click',function(){
         u.coins+=100;
-        if(u.isSelf && typeof coinBalance!=='undefined'){ coinBalance=u.coins; if(typeof updateCoinUI==='function') updateCoinUI(); }
+        if(u.isSelf && typeof coinBalance!=='undefined'){ coinBalance=u.coins; if(typeof updateCoinUI==='function') updateCoinUI(); if(typeof spWalletPush==='function') spWalletPush(); }
         adminLog('Credited +100 coins to '+u.name+' — naya balance: '+u.coins);
         showToast('🪙 '+u.name+' received +100 coins — balance: '+u.coins);
         renderAdminDashboard();
@@ -2828,8 +2855,82 @@ var SERIES={};
 var EP_TITLES=['The First Meeting','A Dangerous Deal','Secrets Revealed','Dil Ka Faisla','The Twist No One Saw','Midnight Truth','Purani Yaadein','Final Confrontation'];
 /* === COIN UNLOCK SYSTEM — First 5 free, EP 6+ = 5 coins === */
 var FREE_EP_COUNT=5, COIN_COST=5, AD_REWARD=30;
-var coinBalance=0; // Hamesha 0 se shuru — koi bana hua balance nahi
+var coinBalance=0; // Default 0 — saved balance neeche WALLET SAVE block se restore hota hai
 var unlockedEpisodes={}; // key: seriesId + '-' + epIndex (0-based) — in-memory for this session only
+/* === WALLET SAVE — coins + daily check-in streak ka permanent save ===
+   App band karke dobara kholo to balance/streak ZERO nahi hota:
+   (1) DEVICE SAVE: coin balance, streak aur last claim date har change par
+       turant localStorage me save hote hain, aur app khulte hi yahin se
+       load hote hain (neeche wala restore block).
+   (2) SUPABASE SYNC: user signed in ho to wahi values uske `profiles` row
+       me bhi sync hoti hain (coin_balance pakka column hai; checkin_streak /
+       last_claim_date columns hon to wo bhi sync hote hain, na hon to wo
+       update chup-chaap skip ho jata hai — device save hamesha chalta hai).
+   (3) App khulte / sign-in hote hi profile padh kar dono ka behtar wala
+       rakha jata hai: zyada coins, aur aaj/kal wali taza streak. */
+var SP_WALLET_KEY='sp_wallet_v1';
+var SP_WALLET_SB_URL='https://jvjfmnkhyllnxdxcecco.supabase.co';
+var SP_WALLET_SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2amZtbmtoeWxsbnhkeGNlY2NvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUzNzUzMzcsImV4cCI6MjExMDk1MTMzN30.exJt6S8JEG9WyyBH2jGJ4jjZK2i3hFj50Z6IXTbRGDg';
+var spCheckin={streak:0,last:''}; // Daily check-in state — Rewards IIFE isi object ko use karta hai
+var spWalletUserId=null, spWalletSb=null, spWalletPushTimer=null;
+function spWalletLocalRead(){ try{ var r=localStorage.getItem(SP_WALLET_KEY); var d=r?JSON.parse(r):null; return (d&&typeof d==='object')?d:null; }catch(e){ return null; } }
+function spWalletSaveLocal(){ try{ localStorage.setItem(SP_WALLET_KEY, JSON.stringify({coins:(typeof coinBalance!=='undefined'&&coinBalance>0)?Math.floor(coinBalance):0, streak:spCheckin.streak||0, last:spCheckin.last||''})); }catch(e){} }
+function spWalletClient(){ if(spWalletSb) return spWalletSb; if(!window.supabase||!window.supabase.createClient) return null; try{ spWalletSb=window.supabase.createClient(SP_WALLET_SB_URL,SP_WALLET_SB_KEY); }catch(e){ return null; } return spWalletSb; }
+function spWalletIsoDate(localStr){ if(!localStr) return null; var p=String(localStr).split('-'); if(p.length!==3) return null; function pad(x){ return (x.length<2?'0':'')+x; } return p[0]+'-'+pad(p[1])+'-'+pad(p[2]); }
+function spWalletLocalDate(isoStr){ if(!isoStr) return ''; var p=String(isoStr).slice(0,10).split('-'); if(p.length!==3) return ''; return parseInt(p[0],10)+'-'+parseInt(p[1],10)+'-'+parseInt(p[2],10); }
+function spWalletDayStr(off){ var d=new Date(); d.setDate(d.getDate()+(off||0)); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+/* Har balance/streak change par ye call hota hai — pehle device par turant
+   save, phir signed-in user ke Supabase profile me sync (halki debounce ke saath). */
+function spWalletPush(){
+  spWalletSaveLocal();
+  if(!spWalletUserId) return;
+  if(spWalletPushTimer) clearTimeout(spWalletPushTimer);
+  spWalletPushTimer=setTimeout(function(){
+    var c=spWalletClient(); if(!c||!spWalletUserId) return;
+    var uid=spWalletUserId, bal=(typeof coinBalance!=='undefined')?coinBalance:0;
+    function send(){
+      try{ c.from('profiles').update({coin_balance:bal}).eq('id',uid).then(function(){},function(){}); }catch(e){}
+      try{ c.from('profiles').update({checkin_streak:spCheckin.streak||0, last_claim_date:spWalletIsoDate(spCheckin.last)}).eq('id',uid).then(function(){},function(){}); }catch(e){}
+    }
+    try{ c.auth.getSession().then(send,function(){ send(); }); }catch(e){ send(); }
+  },350);
+}
+/* Sign-in / session restore par auth module ye call karta hai — profile se
+   saved balance/streak load karke device wale se merge karta hai. */
+function spWalletOnUser(user){
+  if(!user||!user.id){ spWalletUserId=null; return; }
+  spWalletUserId=user.id;
+  var c=spWalletClient(); if(!c) return;
+  function pull(){
+    try{
+      c.from('profiles').select('*').eq('id',user.id).maybeSingle().then(function(r){
+        if(!r||!r.data){ // Profile row hi nahi hai (jaise Phone login) — bana kar current wallet sync kar do
+          try{ c.from('profiles').insert({id:user.id, display_name:(user.user_metadata&&(user.user_metadata.full_name||user.user_metadata.name))||'', coin_balance:(typeof coinBalance!=='undefined')?coinBalance:0}).then(function(){ spWalletPush(); },function(){ spWalletPush(); }); }catch(e){ spWalletPush(); }
+          return;
+        }
+        var d=r.data, changed=false;
+        if(typeof d.coin_balance==='number' && d.coin_balance>(coinBalance||0)){ coinBalance=d.coin_balance; changed=true; }
+        var cLast=spWalletLocalDate(d.last_claim_date||''), cStreak=(typeof d.checkin_streak==='number')?d.checkin_streak:0;
+        if(cLast&&(cLast===spWalletDayStr(0)||cLast===spWalletDayStr(-1))){
+          var lLast=spCheckin.last||'';
+          if(!(lLast===spWalletDayStr(0)||lLast===spWalletDayStr(-1)) || cStreak>(spCheckin.streak||0)){ spCheckin.streak=cStreak; spCheckin.last=cLast; changed=true; }
+        }
+        if(changed){ spWalletSaveLocal(); if(typeof updateCoinUI==='function') updateCoinUI(); if(typeof window!=='undefined'&&typeof window.spRenderCheckin==='function') window.spRenderCheckin(); }
+        spWalletPush(); // device par zyada ho to cloud ko bhi barabar kar do
+      },function(){ spWalletPush(); });
+    }catch(e){}
+  }
+  try{ c.auth.getSession().then(pull,function(){ pull(); }); }catch(e){ pull(); }
+}
+/* APP KHULTE HI RESTORE — device par saved balance/streak coin system me
+   wapas bhar do, taaki pehle render (updateCoinUI + check-in grid) me hi
+   saved values dikhen, zero nahi. */
+(function(){
+  var d=spWalletLocalRead(); if(!d) return;
+  if(typeof d.coins==='number'&&d.coins>0) coinBalance=Math.floor(d.coins);
+  if(typeof d.streak==='number'&&d.streak>0) spCheckin.streak=Math.floor(d.streak);
+  if(typeof d.last==='string'&&d.last) spCheckin.last=d.last;
+})();
 function isEpFree(idx){ return idx < FREE_EP_COUNT; }
 function isEpUnlocked(sid,idx){ return isEpFree(idx) || !!unlockedEpisodes[sid+'-'+idx]; }
 function epAccessLabel(sid,idx){ if(isEpFree(idx)) return 'FREE'; if(isEpUnlocked(sid,idx)) return '✓ Unlocked'; return '🔒 '+COIN_COST+' Coins'; }
@@ -2850,6 +2951,7 @@ function unlockEpisode(sid,idx){
   coinBalance-=COIN_COST;
   unlockedEpisodes[sid+'-'+idx]=true;
   updateCoinUI();
+  if(typeof spWalletPush==='function') spWalletPush(); // kata hua balance bhi turant save — dobara khulne par kharche hue coins wapas nahi aayenge
   showToast('🔓 EP '+(idx+1)+' unlocked for '+COIN_COST+' coins • Balance: '+coinBalance+' coins');
   // Rebuild current reels so the lock overlay disappears and playback can start
   var savedEp=curEp;
@@ -3919,11 +4021,50 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&bpPlayer.c
   var fb=document.getElementById('profFilterBtn'); if(fb) fb.addEventListener('click',function(){ toast('Filter — choose from Drama / Anime / Novel'); });
   var eb=document.getElementById('profEditBtn'); if(eb) eb.addEventListener('click',function(){ toast('Edit — the option to clear / manage History will be available in the full app'); });
   // For You actions — Like/Comment/Share/Save ab ENGAGEMENT module (neeche) se chalte hain: asal counts (shuru me 0), comments sheet, share sheet aur Profile Saved/Like tabs se jude hue.
-  // Daily check-in claim
-  var claim=document.getElementById('claimCheckinBtn');
-  if(claim) claim.addEventListener('click',function(){ if(typeof coinBalance!=='undefined'){ coinBalance+=10; if(typeof updateCoinUI==='function') updateCoinUI(); } claim.disabled=true; claim.textContent='✓ Day 1 Claimed — +10 Coins Received'; var boxes=document.querySelectorAll('#checkinGrid .day-box'); if(boxes[0]){ boxes[0].style.borderColor='#1d7a44'; boxes[0].innerHTML='Day 1<b style="color:#8ff0b3">+10 ✓</b>'; } toast('🪙 +10 Coins — Daily check-in claimed!'); });
-  // VIP plans
-  document.querySelectorAll('[data-vip-plan]').forEach(function(b){ b.addEventListener('click',function(){ var plan=b.getAttribute('data-vip-plan'); document.querySelectorAll('[data-vip-plan]').forEach(function(x){ x.textContent='Activate'; }); b.textContent='✓ Active'; var st=document.getElementById('vipStatusText'); if(st) st.innerHTML='👑 <b style="color:#FFD34D">'+plan+' is ACTIVE</b> (for this session) — all episodes now open without coins, and no ads will appear.'; var pl=document.getElementById('profileVipLine'); if(pl) pl.innerHTML='VIP: '+plan+' Active 👑 • Coins: <span class="coin-balance-val">'+(typeof coinBalance!=='undefined'?coinBalance:40)+'</span> 🪙'; toast('👑 '+plan+' is now active — VIP perks ON!'); }); });
+  // Daily check-in — ASAL coin system: claim karne par coins sach me coinBalance me
+  // judte hain, updateCoinUI() se wallet / Profile / player har jagah naya balance
+  // dikhta hai, aur unlock par wahi balance se coins kat-te bhi hain. Ek din me ek
+  // claim; streak kal ke claim se judti hai, din miss ho to Day 1 se dobara.
+  var CHECKIN_REWARDS=[10,10,15,20,20,25,50];
+  // State WALLET SAVE wale global spCheckin object se judti hai — app khulte hi
+  // device/Supabase se saved streak + last claim date isi me restore ho jati hai.
+  var checkinState=(typeof spCheckin!=='undefined')?spCheckin:{streak:0,last:''};
+  function checkinDayStr(off){ var d=new Date(); d.setDate(d.getDate()+(off||0)); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+  function checkinClaimedToday(){ return checkinState.last===checkinDayStr(0); }
+  function checkinCycleClaimed(){ if(!checkinState.streak) return 0; if(checkinState.last===checkinDayStr(0)||checkinState.last===checkinDayStr(-1)) return ((checkinState.streak-1)%7)+1; return 0; }
+  function renderCheckin(){
+    var cc=checkinCycleClaimed(); var done=checkinClaimedToday();
+    document.querySelectorAll('#checkinGrid .day-box').forEach(function(box,i){
+      box.classList.remove('done','today');
+      var st=box.querySelector('.day-state'); if(!st) return;
+      if(i<cc){ box.classList.add('done'); st.textContent='✓ Claimed'; }
+      else if(i===cc&&!done){ box.classList.add('today'); st.textContent='Claim today'; }
+      else { st.textContent=(i===cc&&done)?'Tomorrow':'Locked'; }
+    });
+    var btn=document.getElementById('claimCheckinBtn');
+    if(btn){
+      if(done){ btn.disabled=true; btn.textContent='✓ Claimed Today — Come Back Tomorrow'; }
+      else { btn.disabled=false; btn.textContent='🪙 Claim Day '+(cc+1)+' — +'+CHECKIN_REWARDS[cc%7]+' Coins'; }
+    }
+    var sk=document.getElementById('checkinStreak'); if(sk) sk.textContent=checkinState.streak;
+  }
+  var claimBtn=document.getElementById('claimCheckinBtn');
+  if(claimBtn) claimBtn.addEventListener('click',function(){
+    if(checkinClaimedToday()){ toast('You have already claimed today — the next reward opens tomorrow.'); return; }
+    checkinState.streak=(checkinState.last===checkinDayStr(-1))?checkinState.streak+1:1;
+    checkinState.last=checkinDayStr(0);
+    var reward=CHECKIN_REWARDS[(checkinState.streak-1)%7];
+    if(typeof coinBalance!=='undefined'){ coinBalance+=reward; if(typeof updateCoinUI==='function') updateCoinUI(); }
+    renderCheckin();
+    // Claim ke coins TURANT save — device par + signed in ho to Supabase profile me bhi
+    if(typeof spWalletPush==='function') spWalletPush();
+    toast('🪙 +'+reward+' Coins added! Balance: '+(typeof coinBalance!=='undefined'?coinBalance:reward)+' coins');
+  });
+  window.spRenderCheckin=renderCheckin; // Supabase se streak load hone par grid dobara paint karne ke liye
+  renderCheckin();
+  // Premium plans — abhi sirf display hai; koi activation/payment NAHI hota.
+  // Activation baad me backend se aayega, tab tak card par tap = Coming Soon.
+  document.querySelectorAll('[data-vip-soon]').forEach(function(el){ el.addEventListener('click',function(){ toast('👑 Premium is coming soon — plans will be activated from the backend.'); }); });
 })();
 
 /* ============================================================
@@ -4029,6 +4170,10 @@ document.getElementById('deleteAccountBtn').addEventListener('click',function(){
   openConfirm('Delete account?','All data on this device — settings, coins, unlocks, unlocked endings and history — will be removed forever. This cannot be undone.',function(){
     userSettings=JSON.parse(JSON.stringify(SETTINGS_DEFAULTS));
     coinBalance=0; unlockedEpisodes={}; if(typeof bpEndingsUnlocked!=='undefined') bpEndingsUnlocked={};
+    // Saved wallet bhi device se saaf — warna delete ke baad coins/streak wapas load ho jayenge
+    if(typeof spCheckin!=='undefined'){ spCheckin.streak=0; spCheckin.last=''; }
+    try{ localStorage.removeItem((typeof SP_WALLET_KEY!=='undefined')?SP_WALLET_KEY:'sp_wallet_v1'); }catch(e){}
+    if(typeof window!=='undefined'&&typeof window.spRenderCheckin==='function') window.spRenderCheckin();
     currentUserEmail=''; currentUserPhone=''; currentUserName=''; spSignedIn=false; if(typeof setRole==='function') setRole('user',true);
     if(typeof updateCoinUI==='function') updateCoinUI();
     if(typeof bpUpdateEndingsBadge==='function') bpUpdateEndingsBadge();
@@ -4669,6 +4814,8 @@ spVoiceUI();
     var name=meta.full_name||meta.name||(email?email.split('@')[0]:'');
     currentUserEmail=email; currentUserPhone=phone; currentUserName=name;
     spSignedIn=!!user;
+    // Wallet sync — signed-in user ke Supabase profile se saved coins/streak load + merge
+    if(typeof spWalletOnUser==='function') spWalletOnUser(user);
     if(typeof setRole==='function') setRole(email?(email===OWNER_ADMIN_EMAIL?'super_admin':'user'):'user', true);
     if(typeof updateProfileIdentity==='function') updateProfileIdentity();
     if(typeof refreshSetRowValues==='function') refreshSetRowValues();
@@ -5192,7 +5339,7 @@ spRenderLib();
    nahi dikhta — koi nakli version ya nakli progress nahi.
    ============================================================ */
 (function(){
-  var APP_VERSION='1.0.3';
+  var APP_VERSION='1.0.4';
   var GH_LATEST='https://api.github.com/repos/uvraj1/storyplay/releases/latest';
   var DISMISS_KEY='sp_update_dismiss_v1';
   var REMIND_MS=20*60*60*1000;
