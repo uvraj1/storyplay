@@ -29,8 +29,9 @@ jobs:
         with:
           java-version: "17"
           distribution: temurin
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Install Android SDK packages
+        run: |
+          echo "y" | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "platform-tools" "platforms;android-36" "build-tools;36.0.0"
       - name: Sync Capacitor web assets to Android
         run: npx cap sync android
       - name: Build Debug APK
@@ -64,8 +65,9 @@ jobs:
         with:
           java-version: "17"
           distribution: temurin
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Install Android SDK packages
+        run: |
+          echo "y" | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "platform-tools" "platforms;android-36" "build-tools;36.0.0"
       - name: Sync Capacitor web assets to Android
         run: npx cap sync android
       - name: Decode signing keystore from Secret
