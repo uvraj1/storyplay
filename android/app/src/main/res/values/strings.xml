@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">StoryPlay</string>
+    <string name="title_activity_main">StoryPlay</string>
+    <string name="package_name">com.storyplay.app</string>
+    <string name="custom_url_scheme">com.storyplay.app</string>
+</resources>
