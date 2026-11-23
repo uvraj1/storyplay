@@ -10,6 +10,8 @@ on:
         required: false
         default: false
         type: boolean
+permissions:
+  contents: write
 jobs:
   build-debug:
     name: Debug APK
