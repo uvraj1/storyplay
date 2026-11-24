@@ -593,6 +593,16 @@ pre.sql{background:#0e0e10;border:1px solid var(--line);border-radius:14px;paddi
 .bp-progress i{position:absolute;left:0;top:0;height:100%}
 .bp-progress .bp-buf{background:rgba(255,255,255,.30);z-index:1;border-radius:99px}
 #bpProgFill{z-index:2}
+/* Slim seek bar (owner, 2026-11-24): tap/drag to move within the current clip, like a normal video player. */
+.bp-seek{position:absolute;left:0;right:0;bottom:calc(max(var(--sab),24px));height:22px;z-index:18;cursor:pointer;touch-action:none}
+.bp-seek-track{position:absolute;left:0;right:0;bottom:6px;height:3px;background:rgba(255,255,255,.28)}
+.bp-seek-track i{position:absolute;left:0;top:0;height:100%}
+.bp-seek-track .bp-buf{background:rgba(255,255,255,.30);z-index:1;width:0%}
+.bp-seek-track #bpSeekFill{background:var(--gold);z-index:2;width:0%}
+.bp-seek.scrubbing .bp-seek-track{height:5px}
+.bp-seek-time{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);background:rgba(0,0,0,.78);color:#fff;font-size:12px;font-weight:700;padding:4px 10px;border-radius:99px;opacity:0;pointer-events:none;transition:opacity .15s;white-space:nowrap}
+.bp-seek-time.show{opacity:1}
+.bp-player.choice-open .bp-seek,.bp-player.ended .bp-seek{opacity:0;pointer-events:none}
 .bp-trigger-mark{z-index:3}
 .bp-knob{position:absolute;top:50%;left:0%;width:13px;height:13px;border-radius:50%;background:#FFD34D;border:2px solid #1A1200;transform:translate(-50%,-50%);z-index:4;box-shadow:0 0 10px rgba(245,158,11,.8);pointer-events:none}
 .bp-stage{cursor:pointer}
@@ -1122,7 +1132,7 @@ pre.branch-json{max-height:340px;overflow:auto}
 #view-foryou{position:relative}
 .fy-menu-btn{position:absolute;top:calc(var(--sat) + 14px);right:14px;z-index:9;width:46px;height:46px;min-height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.22);background:rgba(9,10,15,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#fff;font-size:23px;font-weight:800;line-height:1;display:grid;place-items:center;padding:0}
 .bp-menu-btn{font-size:21px!important;font-weight:800;line-height:1}
-.bp-rail{position:absolute;right:10px;bottom:calc(max(var(--sab),24px) + 262px);z-index:15;display:flex;flex-direction:column;gap:14px;align-items:center;transition:opacity .3s}
+.bp-rail{position:absolute;right:10px;bottom:calc(max(var(--sab),24px) + 96px);z-index:15;display:flex;flex-direction:column;gap:14px;align-items:center;transition:opacity .3s}
 @media(max-height:600px){.bp-rail{bottom:auto;top:calc(max(var(--sat),18px) + 100px)}}
 .bp-player.choice-open .bp-rail,.bp-player.ended .bp-rail{opacity:0;pointer-events:none}
 .bp-act{background:none;border:none;color:#fff;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:700;min-height:50px;padding:0;text-shadow:0 1px 6px rgba(0,0,0,.65)}
@@ -2098,6 +2108,12 @@ body.data-saver .fy-slide img,body.data-saver .bp-player.playing .bp-stage img,b
            time, 'Choices at' pill and all control buttons removed — video only. -->
     </div>
 
+    <!-- SLIM SEEK BAR — tap/drag to move within the current clip -->
+    <div class="bp-seek" id="bpSeek" role="slider" aria-label="Seek video" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <div class="bp-seek-track"><i class="bp-buf" id="bpBufFill"></i><i id="bpSeekFill"></i></div>
+      <span class="bp-seek-time" id="bpSeekTime">0:00 / 0:00</span>
+    </div>
+
     <!-- SIDE ACTION RAIL — reels-style Like / Comment / Share / Save -->
     <div class="bp-rail" id="bpRail">
       <button class="bp-act" data-eng-like="current-story" type="button" aria-label="Like" aria-pressed="false"><span class="ic heart-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></span><span data-eng-likecount="current-story">0</span></button>
@@ -2999,10 +3015,11 @@ function startProgress(){
   var track=document.getElementById('reelTrack'); var slides=track.children; var slide=slides[curEp]; if(!slide) return;
   var bar=slide.querySelector('.reel-progress i'); if(bar) bar.style.width='0%';
   document.querySelectorAll('.reel-slide').forEach(function(sl){sl.classList.remove('active')}); slide.classList.add('active');
+  var rv=slide.querySelector('video.poster-bg'); if(rv&&rv.paused){ var rpr=rv.play(); if(rpr&&rpr.catch) rpr.catch(function(){}); }
   progTimer=setInterval(function(){ if(isPaused) return; progVal+=1.25; if(bar) bar.style.width=Math.min(progVal,100)+'%'; if(progVal>=100){ stopProgress(); var s=SERIES[curSeries]; var total=Math.min(s.eps,12); if(curEp<total-1){ document.getElementById('autoNextBadge').classList.add('show'); setTimeout(function(){document.getElementById('autoNextBadge').classList.remove('show')},1600); goToEp(curEp+1,false); } else { showToast('Season complete — open Episodes to replay'); } } },100);
 }
 function stopProgress(){ if(progTimer) clearInterval(progTimer); progTimer=null; }
-function togglePause(slide){ isPaused=!isPaused; var ind=slide.querySelector('.pause-ind'); if(ind){ ind.classList.toggle('show',isPaused); ind.querySelector('span').textContent=isPaused?'▶':'❚❚'; } }
+function togglePause(slide){ isPaused=!isPaused; var v=slide.querySelector('video.poster-bg'); if(v){ if(isPaused){ v.pause(); } else { var pr=v.play(); if(pr&&pr.catch) pr.catch(function(){}); } } var ind=slide.querySelector('.pause-ind'); if(ind){ ind.classList.toggle('show',isPaused); ind.querySelector('span').textContent=isPaused?'▶':'❚❚'; } }
 function goToEp(idx,manual){ var s=SERIES[curSeries]; var total=Math.min(s.eps,12); if(idx<0||idx>=total) return; curEp=idx; var track=document.getElementById('reelTrack'); track.scrollTo({top:idx*track.clientHeight,behavior:manual?'smooth':'smooth'}); document.getElementById('playerEpTitle').textContent='EP '+(idx+1)+': '+epTitle(curSeries,idx); setTimeout(startProgress,420); buildDrawer(); }
 function buildDrawer(){ var s=SERIES[curSeries]; if(!s) return; document.getElementById('drawerTitle').textContent=s.title+' — Episodes'; var sub=document.getElementById('drawerSub'); if(sub) sub.innerHTML='First 5 episodes FREE • EP 6 onwards: '+SP_LOCK_SVG+' '+COIN_COST+' coins to unlock • Balance: '+SP_COIN_SVG+' '+coinBalance+' coins'; var grid=document.getElementById('epGrid'); grid.innerHTML=''; for(var i=0;i<s.eps;i++){ (function(idx){ var b=document.createElement('button'); var free=isEpFree(idx), unlocked=isEpUnlocked(curSeries,idx); b.innerHTML=(idx+1)+'<small>'+(free?'FREE':(unlocked?'✓ OPEN':SP_LOCK_SVG+' '+COIN_COST))+'</small>'; if(idx===curEp) b.className='current'; else if(!free && unlocked) b.className='unlocked'; else if(!free) b.className='locked'; b.addEventListener('click',function(){ closeDrawer(); if(idx<Math.min(s.eps,12)){ goToEp(idx,true); if(!isEpUnlocked(curSeries,idx)) showToast('EP '+(idx+1)+' is locked — unlocking needs '+COIN_COST+' coins, your balance is '+coinBalance); } else { showToast('EP '+(idx+1)+' — preview shows first 12 episodes; unlock rule is the same (EP 6+ = '+COIN_COST+' coins)'); goToEp(idx%12,true); } }); grid.appendChild(b); })(i); } }
 function openDrawer(){ buildDrawer(); document.getElementById('epDrawer').classList.add('open'); document.getElementById('drawerBackdrop').classList.add('open'); if(typeof spNavPush==='function') spNavPush('ep-drawer',function(){ closeDrawer(); }); }
@@ -3573,9 +3590,16 @@ function bpPreloadTargets(node){
   });
 }
 function bpRenderProgress(){
-  /* Clean cinematic player (owner, 2026-11-24): progress bar, time and
-     'Choices at' pill removed from the player — no-op, kept because the
-     tick/loop code still calls it. */
+  /* Slim seek bar (owner, 2026-11-24): thin gold line, tap/drag to seek. */
+  var fill=document.getElementById('bpSeekFill');
+  var seek=document.getElementById('bpSeek');
+  if(!fill||!bpCurrent) return;
+  var d=(bpIsRealVideo(bpCurrent)&&bpVideo.duration&&isFinite(bpVideo.duration))?bpVideo.duration:(bpCurrent.duration||0);
+  var pct=(d&&d>0)?Math.max(0,Math.min(100,(bpTime/d)*100)):0;
+  fill.style.width=pct+'%';
+  if(seek) seek.setAttribute('aria-valuenow',String(Math.round(pct)));
+  var bubble=document.getElementById('bpSeekTime');
+  if(bubble&&bubble.classList.contains('show')) bubble.textContent=bpFmtTime(bpTime)+' / '+bpFmtTime(d||0);
 }
 function bpLoadNode(nodeId,viaLabel){
   var node=BP_NODES[nodeId]; if(!node) return;
@@ -3820,6 +3844,29 @@ function bpPlayVideo(){
     }
   });
 }
+/* Tap = Play/Pause toggle (owner, 2026-11-24): the old #bpPlayPause button was
+   removed in the clean player, so the stage toggles playback directly. */
+function bpTogglePlayPause(){
+  if(bpChoiceOpen||bpEnded||!bpCurrent) return;
+  var ind=document.getElementById('bpPauseInd');
+  if(bpIsRealVideo(bpCurrent)){
+    if(bpVideo.paused){
+      bpPlayVideo(); bpPlaying=true; bpPlayer.classList.add('playing');
+      if(ind) ind.classList.remove('show');
+    } else {
+      try{ bpVideo.pause(); }catch(e){}
+      if(typeof spStopSpeak==='function') spStopSpeak();
+      bpPlaying=false; bpPlayer.classList.remove('playing');
+      if(ind){ ind.classList.add('show'); ind.querySelector('span').textContent='\u275A\u275A'; }
+    }
+  } else {
+    bpPlaying=!bpPlaying;
+    bpPlayer.classList.toggle('playing',bpPlaying);
+    if(bpPlaying){ if(typeof spVoiceOnNode==='function') spVoiceOnNode(bpCurrent); if(ind) ind.classList.remove('show'); }
+    else { if(typeof spStopSpeak==='function') spStopSpeak(); if(ind){ ind.classList.add('show'); ind.querySelector('span').textContent='\u275A\u275A'; } }
+  }
+  bpShowChrome();
+}
 function bpAttachVideo(node){
   bpDestroyHls(); bpVideoErr=false; bpHideVideoError();
   var url=node.video_url;
@@ -3918,15 +3965,40 @@ if(bpRetryBtnEl) bpRetryBtnEl.addEventListener('click',function(){
 /* Stage par tap = Play/Pause toggle */
 var bpStageEl=document.getElementById('bpStage');
 if(bpStageEl) bpStageEl.addEventListener('click',function(){
-  if(bpChoiceOpen||bpEnded||!bpCurrent) return;
-  var b=document.getElementById('bpPlayPause'); if(b) b.click();
+  bpTogglePlayPause();
 });
+/* Slim seek bar — tap/drag to move within the current clip (owner, 2026-11-24) */
+(function(){
+  var seekEl=document.getElementById('bpSeek');
+  if(!seekEl) return;
+  var scrubbing=false;
+  function seekDur(){ if(!bpCurrent) return 0; if(bpIsRealVideo(bpCurrent)&&bpVideo.duration&&isFinite(bpVideo.duration)) return bpVideo.duration; return bpCurrent.duration||0; }
+  function showBubble(){ var b=document.getElementById('bpSeekTime'); if(b){ b.textContent=bpFmtTime(bpTime)+' / '+bpFmtTime(seekDur()); b.classList.add('show'); } }
+  function hideBubble(){ var b=document.getElementById('bpSeekTime'); if(b) b.classList.remove('show'); }
+  function seekFromEvent(e){
+    if(!bpCurrent||bpChoiceOpen||bpEnded) return;
+    var r=seekEl.getBoundingClientRect(); if(!r.width) return;
+    var frac=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));
+    var d=seekDur(); if(!d||d<=0) return;
+    var target=frac*d, trig=bpCurrent.trigger_timestamp_seconds;
+    if(trig!=null&&target>=trig&&bpChoicesFor(bpCurrent.id).length){
+      if(bpIsRealVideo(bpCurrent)){ try{ bpVideo.currentTime=trig; }catch(err){} }
+      bpTime=trig; bpRenderProgress(); showBubble(); bpOpenChoices(); return;
+    }
+    if(bpIsRealVideo(bpCurrent)){ try{ bpVideo.currentTime=target; }catch(err){} }
+    bpTime=target; bpRenderProgress(); showBubble();
+  }
+  seekEl.addEventListener('pointerdown',function(e){ e.preventDefault(); e.stopPropagation(); if(!bpCurrent||bpChoiceOpen||bpEnded) return; scrubbing=true; try{ seekEl.setPointerCapture(e.pointerId); }catch(err){} seekEl.classList.add('scrubbing'); seekFromEvent(e); });
+  seekEl.addEventListener('pointermove',function(e){ if(scrubbing) seekFromEvent(e); });
+  seekEl.addEventListener('pointerup',function(){ scrubbing=false; seekEl.classList.remove('scrubbing'); hideBubble(); });
+  seekEl.addEventListener('pointercancel',function(){ scrubbing=false; seekEl.classList.remove('scrubbing'); hideBubble(); });
+})();
 /* Keyboard — Space play/pause, ←/→ 10s seek, F fullscreen, M mute */
 document.addEventListener('keydown',function(e){
   if(!bpPlayer.classList.contains('open')) return;
   var tag=(e.target&&e.target.tagName)||'';
   if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT') return;
-  if(e.code==='Space'){ e.preventDefault(); var b=document.getElementById('bpPlayPause'); if(b) b.click(); }
+  if(e.code==='Space'){ e.preventDefault(); bpTogglePlayPause(); }
   else if(e.key==='ArrowRight'&&bpCurrent&&!bpChoiceOpen&&!bpEnded){ bpTime=Math.min((bpCurrent.duration||10),bpTime+10); if(bpIsRealVideo(bpCurrent)){ try{ bpVideo.currentTime=bpTime; }catch(err){} } bpRenderProgress(); }
   else if(e.key==='ArrowLeft'&&bpCurrent&&!bpChoiceOpen&&!bpEnded){ bpTime=Math.max(0,bpTime-10); if(bpIsRealVideo(bpCurrent)){ try{ bpVideo.currentTime=bpTime; }catch(err){} } bpRenderProgress(); }
   else if(e.key==='f'||e.key==='F'){ var f=document.getElementById('bpFsBtn'); if(f) f.click(); }
