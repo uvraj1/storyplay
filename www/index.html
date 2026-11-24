@@ -1516,7 +1516,7 @@ body.data-saver .fy-slide img,body.data-saver .bp-player.playing .bp-stage img,b
         <button class="srow" data-set-screen="terms" type="button"><span>Terms of Use</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
         <button class="srow" data-set-screen="update" type="button"><span>Check for Updates</span><span class="sval" id="updRowVal">v1.0.6</span><svg class="chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
       </div>
-      <p class="version-line">Version 1.0.6</p>
+      <p class="version-line">Version 1.0.7</p>
 
       <button class="signout-btn" id="logoutBtn" type="button">Sign out</button>
     </div>
@@ -2086,36 +2086,16 @@ body.data-saver .fy-slide img,body.data-saver .bp-player.playing .bp-stage img,b
         <div class="bp-tt"><b id="bpStoryTitle">StoryPlay</b></div>
         <button class="bp-menu-btn" id="bpMenuBtn" type="button" aria-label="Video settings — language and quality">⋮</button>
       </div>
-      <div class="bp-top-row bp-top-row--map">
-        <button class="bp-map-badge" id="bpMapBadge" type="button" aria-label="Story Map — endings unlocked counter"><svg class="ui-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4 3.8 6v14L9 18l6 2 5.2-2V4L15 6 9 4z"/><path d="M9 4v14M15 6v14"/></svg> Story Map · <span id="bpEndingsCount">0/0 Endings</span></button>
-      </div>
     </div>
     <div class="bp-loop-chip" id="bpLoopChip" style="display:none">↻ Looping last 3 seconds — make your choice!</div>
-    <!-- STORY MAP SHEET — nodes, visited paths & endings unlocked -->
-    <div class="bp-map-sheet" id="bpMapSheet" aria-hidden="true">
-      <div class="bp-map-head"><b><svg class="ui-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4 3.8 6v14L9 18l6 2 5.2-2V4L15 6 9 4z"/><path d="M9 4v14M15 6v14"/></svg> Story Map</b><span id="bpMapSummary">0/0 Endings Unlocked</span><button id="bpMapClose" type="button" aria-label="Close story map">✕</button></div>
-      <div id="bpMapList"></div>
-    </div>
     <div class="bp-pause-ind" id="bpPauseInd"><span>▶</span></div>
 
     <div class="bp-bottom" id="bpBottom">
       <div class="bp-chips">
         <span class="bp-pending" id="bpPendingChip"><svg class="ui-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="10.2" width="18" height="9.8" rx="2"/><path d="M3.6 10.2 4.7 4.6a1.6 1.6 0 0 1 1.9-1.3l12.9 2.4a1.6 1.6 0 0 1 1.2 2L20 10.2"/><path d="m8.2 5 2.2 3.6M13.6 5.9l2.2 3.6"/></svg> Video Clip: Upload Pending</span>
       </div>
-      <h3 id="bpSceneTitle">No story loaded</h3>
-      <p id="bpSceneDesc">Pick a story from Home — at the choice point the video pauses and the decision is yours.</p>
-      <div class="bp-progress" id="bpProgress" role="slider" aria-label="Video seek bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="bp-trigger-mark" id="bpTriggerMark"></span><i class="bp-buf" id="bpBufFill"></i><i id="bpProgFill"></i><span class="bp-knob" id="bpKnob"></span></div>
-      <div class="bp-meta-row">
-        <span class="bp-time" id="bpTime">0:00 / 0:10</span>
-        <span class="bp-trigger-label" id="bpTriggerLabel">⚡ Choices at 0:05</span>
-      </div>
-      <div class="bp-controls">
-        <button class="bp-ctrl-btn gold" id="bpPlayPause" type="button">❚❚ Pause</button>
-        <button class="bp-ctrl-btn" id="bpRestart" type="button"><svg class="ui-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 9.5A8 8 0 1 1 4 13.5"/><path d="M4.3 4.8v4.9h4.9"/></svg> Restart Clip</button>
-        <button class="bp-ctrl-btn" id="bpSkipTrigger" type="button"><svg class="ui-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6.8v10.4L15 12z" fill="currentColor" stroke="none"/><path d="M17.5 6.8v10.4"/></svg> Skip to Choice Point</button>
-        <button class="bp-ctrl-btn" id="bpSpeedBtn" type="button" aria-label="Playback speed">⏩ 1×</button>
-        <button class="bp-ctrl-btn" id="bpFsBtn" type="button" aria-label="Fullscreen"><svg class="ui-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15"/></svg> Fullscreen</button>
-      </div>
+      <!-- Clean cinematic player (owner, 2026-11-24): scene title, progress bar,
+           time, 'Choices at' pill and all control buttons removed — video only. -->
     </div>
 
     <!-- SIDE ACTION RAIL — reels-style Like / Comment / Share / Save -->
@@ -3593,18 +3573,9 @@ function bpPreloadTargets(node){
   });
 }
 function bpRenderProgress(){
-  var node=bpCurrent; if(!node) return;
-  document.getElementById('bpProgFill').style.width=Math.min(100,(bpTime/node.duration)*100)+'%';
-  document.getElementById('bpTime').textContent=bpFmtTime(bpTime)+' / '+bpFmtTime(node.duration);
-  var bpKnobEl=document.getElementById('bpKnob'); if(bpKnobEl) bpKnobEl.style.left=Math.min(100,Math.max(0,(bpTime/(node.duration||1))*100))+'%';
-  var bpProgEl2=document.getElementById('bpProgress'); if(bpProgEl2) bpProgEl2.setAttribute('aria-valuenow',Math.round(Math.min(100,Math.max(0,(bpTime/(node.duration||1))*100))));
-  var mark=document.getElementById('bpTriggerMark'), lab=document.getElementById('bpTriggerLabel');
-  if(node.trigger_timestamp_seconds!=null && !node.is_ending){
-    var pct=(node.trigger_timestamp_seconds/node.duration)*100;
-    mark.style.display='block'; lab.style.display='block';
-    mark.style.left=pct+'%'; lab.style.left=pct+'%';
-    lab.textContent='⚡ Choices at '+bpFmtTime(node.trigger_timestamp_seconds);
-  } else { mark.style.display='none'; lab.style.display='none'; }
+  /* Clean cinematic player (owner, 2026-11-24): progress bar, time and
+     'Choices at' pill removed from the player — no-op, kept because the
+     tick/loop code still calls it. */
 }
 function bpLoadNode(nodeId,viaLabel){
   var node=BP_NODES[nodeId]; if(!node) return;
@@ -3616,8 +3587,7 @@ function bpLoadNode(nodeId,viaLabel){
   document.getElementById('bpStoryTitle').textContent=BP_STORY.title;
   bpUpdateEndingsBadge();
   var bpMapSh=document.getElementById('bpMapSheet'); if(bpMapSh){ bpMapSh.classList.remove('open'); bpMapSh.setAttribute('aria-hidden','true'); }
-  document.getElementById('bpSceneTitle').textContent=node.title;
-  document.getElementById('bpSceneDesc').textContent=node.desc;
+  /* Clean player: scene title/desc elements removed from the markup. */
   // IMAANDAARI: jab tak Backend se real video upload nahi hota, player saaf dikhata hai ki ye poster preview hai — poster ko real video nahi bataya jata.
   var pc=document.getElementById('bpPendingChip'); if(pc) pc.style.display=bpIsRealVideo(node)?'none':'inline-flex';
   if(typeof spVoiceOnNode==='function') spVoiceOnNode(node);
@@ -3632,7 +3602,7 @@ function bpLoadNode(nodeId,viaLabel){
   bpPreloadTargets(node);
   bpRenderProgress();
   bpPlaying=true; bpPlayer.classList.add('playing');
-  document.getElementById('bpPlayPause').textContent='❚❚ Pause';
+  /* Clean player: Play/Pause button removed from the markup. */
   document.getElementById('bpPauseInd').classList.remove('show');
   if(viaLabel) showToast('▶ '+node.title);
   bpShowChrome();
@@ -3786,20 +3756,9 @@ document.getElementById('bpNextStoryBtn').addEventListener('click',function(){
 var bpMapBadgeEl=document.getElementById('bpMapBadge'); if(bpMapBadgeEl) bpMapBadgeEl.addEventListener('click',function(){ bpToggleMap(); });
 var bpMapCloseEl=document.getElementById('bpMapClose'); if(bpMapCloseEl) bpMapCloseEl.addEventListener('click',function(){ bpToggleMap(false); });
 bpPlayer.addEventListener('pointerdown',function(){ bpShowChrome(); });
-document.getElementById('bpRestart').addEventListener('click',function(){ if(!bpCurrent) return; var id=bpCurrent.id; bpPath.pop(); bpLoadNode(id,''); });
-document.getElementById('bpSkipTrigger').addEventListener('click',function(){
-  if(!bpCurrent||bpChoiceOpen||bpEnded) return;
-  if(bpCurrent.trigger_timestamp_seconds!=null){ bpTime=bpCurrent.trigger_timestamp_seconds; if(bpIsRealVideo(bpCurrent)){ try{bpVideo.currentTime=bpTime;}catch(e){} } bpRenderProgress(); bpOpenChoices(); }
-  else showToast('This is an ending node — no choice point');
-});
-document.getElementById('bpPlayPause').addEventListener('click',function(){
-  if(bpChoiceOpen||bpEnded||!bpCurrent) return;
-  bpPlaying=!bpPlaying;
-  bpPlayer.classList.toggle('playing',bpPlaying);
-  if(bpIsRealVideo(bpCurrent)){ if(bpPlaying){ var pr=bpVideo.play(); if(pr&&pr.catch) pr.catch(function(){}); } else bpVideo.pause(); }
-  this.textContent=bpPlaying?'❚❚ Pause':'▶ Play';
-  var ind=document.getElementById('bpPauseInd'); ind.classList.toggle('show',!bpPlaying); ind.querySelector('span').textContent='▶';
-});
+/* Clean cinematic player (owner, 2026-11-24): Restart / Skip-to-Choice /
+   Play-Pause control buttons removed from the player — their handlers go too.
+   The video autoplays and pauses itself at choices and endings. */
 bpVideo.addEventListener('timeupdate',function(){
   // Native tracking for real MP4 nodes: fire the overlay exactly at the trigger.
   if(!bpCurrent||!bpIsRealVideo(bpCurrent)||bpChoiceOpen||bpEnded) return;
@@ -3953,43 +3912,9 @@ if(bpRetryBtnEl) bpRetryBtnEl.addEventListener('click',function(){
   showToast('↻ Reloading the video…');
 });
 /* Seek — progress bar par tap/drag */
-var bpProgSeekEl=document.getElementById('bpProgress');
-function bpSeekTo(clientX){
-  if(!bpCurrent||!bpProgSeekEl) return;
-  var r=bpProgSeekEl.getBoundingClientRect(); if(!r.width) return;
-  var ratio=Math.min(1,Math.max(0,(clientX-r.left)/r.width));
-  var dur=(bpIsRealVideo(bpCurrent)&&bpVideo.duration&&isFinite(bpVideo.duration))?bpVideo.duration:(bpCurrent.duration||10);
-  bpTime=ratio*dur;
-  if(bpIsRealVideo(bpCurrent)){ try{ bpVideo.currentTime=bpTime; }catch(e){} }
-  bpRenderProgress();
-}
-if(bpProgSeekEl){
-  bpProgSeekEl.addEventListener('pointerdown',function(e){
-    if(!bpCurrent||bpChoiceOpen||bpEnded||bpVideoErr) return;
-    bpSeeking=true; try{ bpProgSeekEl.setPointerCapture(e.pointerId); }catch(err){}
-    bpSeekTo(e.clientX); e.preventDefault();
-  });
-  bpProgSeekEl.addEventListener('pointermove',function(e){ if(bpSeeking) bpSeekTo(e.clientX); });
-  bpProgSeekEl.addEventListener('pointerup',function(){ bpSeeking=false; });
-  bpProgSeekEl.addEventListener('pointercancel',function(){ bpSeeking=false; });
-}
-/* Speed — 1× → 1.25× → 1.5× → 2× → 0.5× → 0.75× */
-var bpSpeedBtnEl=document.getElementById('bpSpeedBtn');
-if(bpSpeedBtnEl) bpSpeedBtnEl.addEventListener('click',function(){
-  bpSpeedIdx=(bpSpeedIdx+1)%BP_SPEEDS.length;
-  bpSpeed=BP_SPEEDS[bpSpeedIdx];
-  try{ bpVideo.playbackRate=bpSpeed; }catch(e){}
-  bpSpeedBtnEl.textContent='⏩ '+bpSpeed+'×';
-  showToast('⏩ Playback speed: '+bpSpeed+'×');
-});
-/* Fullscreen — player poori screen par */
-var bpFsBtnEl=document.getElementById('bpFsBtn');
-if(bpFsBtnEl) bpFsBtnEl.addEventListener('click',function(){
-  if(document.fullscreenElement){ try{ document.exitFullscreen(); }catch(e){} return; }
-  var req=bpPlayer.requestFullscreen||bpPlayer.webkitRequestFullscreen;
-  if(req){ try{ var p=req.call(bpPlayer,{navigationUI:'hide'}); if(p&&p.catch) p.catch(function(){ try{ bpPlayer.requestFullscreen(); }catch(e){} }); }catch(e){ try{ bpPlayer.requestFullscreen(); }catch(e2){} } }
-  else showToast('Fullscreen is not supported on this device');
-});
+/* Clean cinematic player (owner, 2026-11-24): seek bar removed — no seeking. */
+/* Clean cinematic player (owner, 2026-11-24): Speed and Fullscreen buttons
+   removed from the player — playback stays at 1×, player is already fullscreen. */
 /* Stage par tap = Play/Pause toggle */
 var bpStageEl=document.getElementById('bpStage');
 if(bpStageEl) bpStageEl.addEventListener('click',function(){
@@ -5349,7 +5274,7 @@ spRenderLib();
    nahi dikhta — koi nakli version ya nakli progress nahi.
    ============================================================ */
 (function(){
-  var APP_VERSION='1.0.6';
+  var APP_VERSION='1.0.7';
   var GH_LATEST='https://api.github.com/repos/uvraj1/storyplay/releases/latest';
   var DISMISS_KEY='sp_update_dismiss_v1';
   var REMIND_MS=20*60*60*1000;
